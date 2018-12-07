@@ -146,7 +146,10 @@ class Car {
 }
 
 class HistoryCar extends Car {
-
+  constructor(){
+    this.gMarkers = new Array();
+  }
+  
 }
 
 class RealTimeCar extends Car {
@@ -213,12 +216,18 @@ class Polygon {
 
 class RealTimeMode {
   constructor() {
+    this.map = null;
     this.polygons = new Array();
     this.cars = new Array();
+    this.loopId = null;
+    this.dragendId = null;
+    this.zoomChangedId = null;
+  }
+  setMap(map){
+    this.map = map;
   }
   setPolygons(){
     console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
-    
   }
   setCars(){
     console.log("Llamando a la funcion /getCars para llenar el arreglo de Polygons");
@@ -226,6 +235,28 @@ class RealTimeMode {
   refreshData(){
     this.setPolygons();
     this.setCars();
+  }
+  initLoop(){
+    let that = this;
+    this.loopId = setInterval(() => {that.refreshData()}, 10000);
+    this.dragendId = this.map.addListener('dragend', () => {
+      that.refreshData();
+    });
+    this.zoomChangedId = this.map.addListener('zoom_changed', () => {
+      that.refreshData();
+    });
+  }
+  stopLoop(){
+    clearInterval(this.loopId);
+    google.maps.event.removeListener(this.dragendId);
+    google.maps.event.removeListener(this.zoomChangedId);
+  }
+  initRealTime(){
+    this.refreshData();
+    this.initLoop();
+  }
+  stopRealTime(){
+    this.stopLoop;
   }
 }
 
@@ -242,7 +273,7 @@ class HistoryMode {
 
 
 /*
-* States {initial: 0,history: 1, realtime: 2}
+* States {initial: 0,realtime: 1, history: 2}
 *
 *
 */
