@@ -230,6 +230,7 @@ class RealTimeMode {
     console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
   }
   setCars(){
+    //realtime cars
     console.log("Llamando a la funcion /getCars para llenar el arreglo de Polygons");
   }
   refreshData(){
@@ -262,12 +263,33 @@ class RealTimeMode {
 
 class HistoryMode {
   constructor(){
-
+    this.map = null;
+    this.cars = new Array();
+    this.dragendId = null;
+    this.zoomChangedId = null;
+  }
+  setMap(map){
+    this.map = map;
+  }
+  setCars(){
+    //historycar
+    console.log("Llamando a la funcion /getCars para llenar el arreglo de Polygons");
   }
   refreshData(){
-    this.setPolygons();
     this.setCars();
-    this.setInterestPoints(); 
+  }
+  initHistory(){
+    let that = this;
+    this.dragendId = this.map.addListener('dragend', () => {
+      that.refreshData();
+    });
+    this.zoomChangedId = this.map.addListener('zoom_changed', () => {
+      that.refreshData();
+    });
+  }
+  stopHistory(){
+    google.maps.event.removeListener(this.dragendId);
+    google.maps.event.removeListener(this.zoomChangedId);
   }
 }
 
@@ -279,12 +301,29 @@ class HistoryMode {
 */
 class Mapster {
   constructor(){
-    this.state = 0;
+    this.state = 1;
     this.element = null;
+    this.modeswitch = null;
     this.map = null;
     this.points_of_interest = new Array();
+    this.historymode = new HistoryMode();
+    this.realtime = new RealTimeMode();
   }
-
+  setSwitch(button){
+    let that = this;
+    this.modeswitch = document.getElementById(button);
+    this.modeswitch.addEventListener('click', () => {
+      if(this.value === "History"){
+        this.value = "Real Time";
+        this.innerHTML = "Real Time";
+      }
+      else if(this.value === "Real Time"){
+        this.value = "History";
+        this.innerHTML = "History";
+      }
+      that.RenderMap();
+    });
+  }
   setElement(element){
     this.element = document.getElementById(element);
   }
@@ -313,19 +352,16 @@ class Mapster {
     this.setInterestPoints(); 
   }
   RenderMap(){
-    this.refreshData();
-    let that = this;
-    setInterval(() => {that.refreshData()}, 5000);
-    this.map.addListener('dragend', () => {
-      that.setPolygons();
-      that.setCars();
-      that.setInterestPoints();
-    });
-    this.map.addListener('zoom_changed', () => {
-      that.setPolygons();
-      that.setCars();
-      that.setInterestPoints();
-    });
+    if(this.state === 1){
+      this.historymode.stopHistory();
+      this.realtime.initRealTime();
+      this.state = 2;
+    }
+    else if(this.state === 2){
+      this.realtime.stopLoop();
+      this.historymode.initHistory();
+      this.state = 1;
+    }
   }
 }
 

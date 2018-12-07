@@ -21,6 +21,7 @@
           <input type="radio" value="historico" name="type">
         </div>
         </form>
+        <button id="mode" type="button" value="Real Time">Real Time</button>
       </div>
     </div>
     <div class="mapwrapper">
@@ -43,11 +44,6 @@
         mapa.setOptions(initOptions(-16.398764, -71.536883, 12, 'hybrid', 15, 6));
         mapa.setMap();
         mapa.RenderMap();
-
-        mapa2 = new Mapster();
-        mapa2.setElement('map');
-        mapa2.setOptions(initOptions(-16.398764, -71.536883, 12, 'hybrid', 15, 6));
-        mapa2.setMap();
         
       }
     </script>
