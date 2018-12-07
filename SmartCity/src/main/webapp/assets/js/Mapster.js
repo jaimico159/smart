@@ -1,0 +1,300 @@
+function holamundo(){
+  console.log("Hi causa");
+}
+class Coordinate {
+  constructor(lat, long){
+    this.lat = lat;
+    this.long = long;
+  }
+}
+class InfoWindow {
+  constructor(content, map, gMarker){
+    this.content = content;
+    this.map = map;
+    this.gMarker = gMarker;
+    console.log("Empezaondo");
+    this.gInfoWindow = new google.maps.InfoWindow({
+      content: this.content,
+      maxWidth: 650,
+    });
+    console.log("Terminando");
+    this.Listener(this.gMarker, this.map, this.gInfoWindow);
+  }
+
+  setContent(content){
+		this.content = content;
+		this.gInfoWindow.setContent(this.content);
+	}
+	show(){
+		this.gInfoWindow.open(this.map, this.gMarker);
+	}
+	hide(){
+		this.gInfoWindow.close();
+	}
+  Listener(marker, map, infoW){
+		this.gMarker.addListener('click', function(){
+			infoW.open(map, marker);
+		});
+  } 
+}
+
+class DataJson {
+	constructor(map, options, url){
+		this.map = map;
+		this.options = options;
+		this.url = url;
+		this.data = new google.maps.Data();
+		this.data.loadGeoJson(this.url);
+		this.data.setStyle(this.options);
+	}
+
+
+	show(){
+		this.data.setMap(this.map);
+	}
+	hide(){
+		this.data.setMap(null);
+	}
+	setStyle(options){
+		this.data.setStyle(options);
+	}
+
+}
+
+class PointOfInterest {
+  constructor(){
+    this.id = null;
+    this.map = null;
+    this.title = null;
+    this.iconurl = null;
+    this.gMarker = null;
+    this.position = null;
+    this.infoWindow = null;
+  }
+  setId(id){
+    this.id = id;
+  }
+  setMap(map){
+    this.map = map;
+  }
+  setTitle(title){
+    this.title = title;
+  }
+  setIconUrl(iconurl){
+    this.iconurl = iconurl;
+  }
+  setPosition(lat, long){
+    if(this.position){
+      this.position = new Coordinate(lat,long);
+    }
+    else {
+      this.position.lat = lat;
+      this.position.long = long;
+    }
+    if(this.gMarker){
+      this.gMarker.setPosition({lat: lat, lng: long});
+    }
+  }
+  setGoogleMarker(){
+    this.gMarker = new google.maps.Marker({
+      icon: this.iconurl,
+      map: this.map,
+      position: {lat: this.position.lat, lng: this.position.long},
+      visible: false,
+    });
+  }
+  setInfoWindow(content){
+    this.infoWindow = new InfoWindow(content, this.map, this.gMarker);
+  }
+  show(){
+    this.gMarker.setVisible(true);
+  }
+  hide(){
+    this.gMarker.setVisible(false);
+    this.infoWindow.hide();
+  }
+}
+
+class Car {
+  constructor(){
+    this.id = null;
+    this.map = null;
+    this.title = null;
+    this.iconurl = null;
+    // this.gMarker = null;
+    // this.position = null;
+    // this.infoWindow = null;
+  }
+  setId(id){
+    this.id = id;
+  }
+  setMap(map){
+    this.map = map;
+  }
+  setTitle(title){
+    this.title = title;
+  }
+  setIconUrl(iconurl){
+    this.iconurl = iconurl;
+  }
+  show(){
+    console.log("Showing Car");
+  }
+  hide(){
+    console.log("Hiding Car");
+  }
+}
+
+class HistoryCar extends Car {
+
+}
+
+class RealTimeCar extends Car {
+  constructor(){
+    this.gMarker = null;
+    this.position = null;
+    this.infoWindow = null;
+  }
+  setPosition(lat, long){
+    if(this.position){
+      this.position = new Coordinate(lat,long);
+    }
+    else {
+      this.position.lat = lat;
+      this.position.long = long;
+    }
+    if(this.gMarker){
+      this.gMarker.setPosition({lat: lat, lng: long});
+    }
+  }
+  setGoogleMarker(){
+    this.gMarker = new google.maps.Marker({
+      icon: this.iconurl,
+      map: this.map,
+      position: {lat: this.position.lat, lng: this.position.long},
+      visible: false,
+    });
+  }
+  setInfoWindow(content){
+    this.infoWindow = new InfoWindow(content, this.map, this.gMarker);
+  }
+  show(){
+    this.gMarker.setVisible(true);
+  }
+  hide(){
+    this.gMarker.setVisible(false);
+    this.infoWindow.hide();
+  }
+}
+
+class Polygon {
+  constructor(){
+    this.id = id;
+    this.element = element;
+    this.map = map;
+    this.name = name;
+  }
+  setId(id){
+    this.id = id;
+  }
+  setElement(element){
+    this.element = element;
+  }
+  setMap(map){
+    this.map = map;
+  }
+  setName(name){
+    this.name = name;
+  }
+  setGeoJson(){
+    this.geoJson = new DataJson();
+  }
+}
+
+class RealTimeMode {
+  constructor() {
+    this.polygons = new Array();
+    this.cars = new Array();
+  }
+  setPolygons(){
+    console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
+    
+  }
+  setCars(){
+    console.log("Llamando a la funcion /getCars para llenar el arreglo de Polygons");
+  }
+  refreshData(){
+    this.setPolygons();
+    this.setCars();
+  }
+}
+
+class HistoryMode {
+  constructor(){
+
+  }
+  refreshData(){
+    this.setPolygons();
+    this.setCars();
+    this.setInterestPoints(); 
+  }
+}
+
+
+/*
+* States {initial: 0,history: 1, realtime: 2}
+*
+*
+*/
+class Mapster {
+  constructor(){
+    this.state = 0;
+    this.element = null;
+    this.map = null;
+    this.points_of_interest = new Array();
+  }
+
+  setElement(element){
+    this.element = document.getElementById(element);
+  }
+  setOptions(options){
+    this.options = options;
+  }
+  setMap(){
+    this.map = new google.maps.Map(this.element, this.options);
+    this.map.mapTypes.set('principal', mapStyle('Principal', maptypeprincipal));
+    this.map.mapTypes.set('plateado', mapStyle('Plateado', maptypesilver));
+    this.map.mapTypes.set('retro', mapStyle('Retro', maptyperetro));
+    this.map.mapTypes.set('dark', mapStyle('Oscuro', maptypedark));
+    this.map.mapTypes.set('night', mapStyle('Noche', maptypenight));
+    this.map.mapTypes.set('aubergine', mapStyle('Aubergine', maptypeaubergine));
+    this.map.setMapTypeId('principal');
+  }
+  setMapTypes(){
+    console.log("Seteando tipos de mapa");
+  }
+  setInterestPoints(){
+    console.log("Llamando a la funcion /getInterestPoints para llenar el arreglo de Puntos de Interes");
+  }
+  refreshData(){
+    //refresh Real Time
+    //refres History
+    this.setInterestPoints(); 
+  }
+  RenderMap(){
+    this.refreshData();
+    let that = this;
+    setInterval(() => {that.refreshData()}, 5000);
+    this.map.addListener('dragend', () => {
+      that.setPolygons();
+      that.setCars();
+      that.setInterestPoints();
+    });
+    this.map.addListener('zoom_changed', () => {
+      that.setPolygons();
+      that.setCars();
+      that.setInterestPoints();
+    });
+  }
+}
+
