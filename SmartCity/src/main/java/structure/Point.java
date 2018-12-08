@@ -14,6 +14,7 @@ public class Point {
 	double latitude;
 	double longitude;
 	int order;
+  
 	public Point(double latitude, double longitude, int order){
 		this.latitude= latitude;
 		this.longitude=longitude;

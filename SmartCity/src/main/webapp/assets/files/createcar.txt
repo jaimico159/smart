@@ -1,0 +1,7 @@
+var car = new Car();
+car.setId(1);
+car.setMap(mapa.map);
+car.setTitle("carrito");
+car.setPosition(-16.398764,-71.536883);
+car.setGoogleMarker();
+car.setInfoWindow("CONTENIDO");
