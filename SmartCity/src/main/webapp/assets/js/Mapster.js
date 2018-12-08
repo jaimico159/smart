@@ -148,6 +148,33 @@ class Car {
 class HistoryCar extends Car {
   constructor(){
     this.gMarkers = new Array();
+    this.jsonHistory = null;
+  }
+  setHistory(positions){
+    let marker = new google.maps.Marker({
+      icon: this.iconurl,
+      map: this.map,
+      position: {lat: this.position.lat, lng: this.position.long},
+      visible: false,
+    });
+    this.gMarkers.push(marker);
+    marker.addListener('click', () => {
+      if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+    });
+  }
+  show(){
+    this.gMarkers.map( (marker) => {
+      marker.setVisible(true);
+    })
+  }
+  hide(){
+    this.gMarkers.map( (marker) => {
+      marker.setVisible(false);
+    })
   }
   
 }
@@ -340,10 +367,19 @@ class Mapster {
     this.map.mapTypes.set('aubergine', mapStyle('Aubergine', maptypeaubergine));
     this.map.setMapTypeId('principal');
   }
-  setMapTypes(){
-    console.log("Seteando tipos de mapa");
+  addInterestPoint(jsonPoint){
+    let point = new PointOfInterest();
+    point.setId(jsonPoint.id);
+    point.map(this.map);
+    point.setTitle(jsonPoint.title);
+    point.setIconUrl("icon.svg");
+    point.setPosition(jsonPoint.position[0], jsonPoint.position[1]);
+    point.setGoogleMarker();
+    point.setInfoWindow("CONTENIDO");
+    this.points_of_interest.push();
   }
   setInterestPoints(){
+    this.points_of_interest.push();
     console.log("Llamando a la funcion /getInterestPoints para llenar el arreglo de Puntos de Interes");
   }
   refreshData(){
