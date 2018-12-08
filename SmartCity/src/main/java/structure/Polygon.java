@@ -10,7 +10,7 @@ import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class Polygon {
-	@Id@Index Long id;
+	@Id Long id;
 	@Index String name;
 	String description;
 	int status;

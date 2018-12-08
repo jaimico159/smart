@@ -55,14 +55,14 @@ public class getPolygonServlet extends HttpServlet{
 		PrintWriter writer = resp.getWriter();
 		List<Object> polygons = Cpolygon.loadPolygon();
 		
-		polygon.addPoint(latInfIzquierda+","+longInfIzquierda);
-		polygon.addPoint(latInfDerecha+","+longInfDerecha);
-		polygon.addPoint(latSupDerecha+","+longSupDerecha);
-		polygon.addPoint(latSupIzquieda+","+longSupIzquieda);
+		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
+		polygon.addPoint(longInfDerecha+","+latInfDerecha);
+		polygon.addPoint(longSupDerecha+","+latSupDerecha);
+		polygon.addPoint(longSupIzquieda+","+latSupIzquieda);
 		
 		polygon.makePolygon();
 		 JSONObject entrega = new JSONObject();
-		 entrega.put("type", "FeatureCollection");
+		
 		 
 		 
 		 JSONArray array = new JSONArray();
@@ -79,16 +79,16 @@ public class getPolygonServlet extends HttpServlet{
 				 for(Object j : points ) {
 					 if(j instanceof structure.Point) {
 						 aux2.add((structure.Point)j);
-						 verificador = polygon.coordinate_is_inside_polygon(((structure.Point)j).getLatitude(), ((structure.Point)j).getLongitude());
+						 verificador = polygon.coordinate_is_inside_polygon(((structure.Point)j).getLongitude(), ((structure.Point)j).getLatitude());
                          if(verificador==true) {
                         	 contador++;
                          }
 					 }
 				 }
 				 if(contador == 4) {
-					 recolector.put("type", "Feature");
-					 recolector.put("name", aux.getName() );
-					 recolector.put("properties",new JSONObject() );
+					 recolector.put("id", aux.getId());
+					 recolector.put("name", aux.getName());
+					 recolector.put("description", aux.getDescription());
 					 JSONObject geometry = new JSONObject();
 					 JSONArray arfinal = new JSONArray();
 					 JSONArray arfinal2 = new JSONArray();
@@ -96,22 +96,22 @@ public class getPolygonServlet extends HttpServlet{
 						JSONArray ar = new JSONArray();
 						if(k==aux2.size()) {
 							ar.put(aux2.get(0).getLatitude());
+							ar.put(aux2.get(0).getLongitude());
+							arfinal.put(ar);
 						}else {
 						ar.put(aux2.get(k).getLatitude());
 						ar.put(aux2.get(k).getLongitude());
 						arfinal.put(ar);}
 						
 					}
-					arfinal2.put(arfinal);
-					geometry.put("type", "Polygo");
-					geometry.put("coordinates", arfinal2);
-					 recolector.put("geometry", geometry);
+					
+					 recolector.put("path", arfinal);
 				 }
 				 array.put(recolector);
 			 }
 			
 		    }
-		 entrega.put("features", array);
+		 entrega.put("polygons", array);
 		 resp.setCharacterEncoding("UTF-8");
 	      writer.print(entrega);
 	      writer.flush();

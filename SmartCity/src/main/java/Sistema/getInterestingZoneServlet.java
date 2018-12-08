@@ -25,20 +25,17 @@ public class getInterestingZoneServlet extends HttpServlet {
 		resp.setContentType("application/json");
 		PolygonUtilities Cpolygon = new PolygonUtilities();
 		// String idPolygon=req.getParameter("id");
-		String idPolygon = "poligono2";
+		String idPolygon = "5770237022568448";
 		List<structure.Point> puntos = new ArrayList<structure.Point>();
 		InterestingZoneUtilities Czone = new InterestingZoneUtilities();
 		buildPolygon2 buildPolygon = new buildPolygon2();
 		PrintWriter writer = resp.getWriter();
-		Iterable<structure.Polygon> lista = Cpolygon.loadOnePolygon(idPolygon);
+		structure.Polygon polygon = Cpolygon.loadOnePolygon(idPolygon);
 
 		System.out.println("hola");
+		System.out.println(polygon.getName());
 
-		for (Object i : lista) {
-			System.out.println(((structure.Polygon) i).getName());
-			// locations.add((Location)i);
-			puntos = ((structure.Polygon) i).getPoints();
-		}
+		puntos = polygon.getPoints();
 		System.out.println(puntos.size());
 		for (Object i : puntos) {
 			if (i instanceof structure.Point) {

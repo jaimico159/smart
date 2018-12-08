@@ -3,6 +3,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.util.List;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -34,9 +35,8 @@ public class PolygonUtilities {
 	
 	public  Polygon loadOnePolygon(String polygon) {
 		ObjectifyService.register(Polygon.class);
-				
-		//Iterable<Polygon> poligon = ofy().load().type(Polygon.class).filter("name", polygon);
-		Polygon c = ofy().load().type(Polygon.class).id("5770237022568448").now();
+		Long lng = Long.parseLong(polygon);
+		Polygon c = ofy (). load (). key (Key.create (Polygon.class, lng)).now();
 		return c;
 	}
 

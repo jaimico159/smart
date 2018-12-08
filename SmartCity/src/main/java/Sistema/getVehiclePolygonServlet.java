@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import structure.Location;
@@ -31,7 +33,7 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		resp.setContentType("application/json");
 		PolygonUtilities Cpolygon = new PolygonUtilities();
 		//String idPolygon=req.getParameter("id");
-		String idPolygon = "poligono2";
+		String idPolygon = "5770237022568448";
 		
 		VehicleUtilities Cvehicle = new VehicleUtilities();
 		buildPolygon2 buildPolygon = new buildPolygon2();
@@ -40,17 +42,11 @@ public class getVehiclePolygonServlet extends HttpServlet{
 	
 
 		LocationUtilities Clocation = new LocationUtilities();
-		//Iterable<structure.Polygon>lista = Cpolygon.loadOnePolygon(idPolygon);
+	
 		structure.Polygon lista = Cpolygon.loadOnePolygon(idPolygon);
 		System.out.println(lista.getName());
 		puntos = lista.getPoints();
 		System.out.println("hola");
-		
-		/*for (Object i : lista) {
-			System.out.println(((structure.Polygon)i).getName());
-		      //  locations.add((Location)i);
-		       puntos = ((structure.Polygon) i).getPoints();
-		    }*/
 		 System.out.println(puntos.size());
 		 for (Object i: puntos) {
 			 if(i instanceof structure.Point ) {
@@ -64,7 +60,7 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		List<Object> vehicles = Cvehicle.loadVehicle();
         JSONObject principal = new JSONObject();
         JSONObject entrega = new JSONObject();
-		//JSONArray array = new JSONArray();
+        JSONArray arrayFinal = new JSONArray();
 		
 		
 		for(Object i: vehicles) {
@@ -83,22 +79,22 @@ public class getVehiclePolygonServlet extends HttpServlet{
 				System.out.println(local.get(0).getLatitude()+", "+ local.get(0).getLongitude());
 				System.out.println(verificador);
 				JSONObject json = new JSONObject();
+				JSONArray array = new JSONArray();
 				if(verificador == true) {
 					json.put("id", local.get(0).getId());
-					json.put("latitude", local.get(0).getLatitude());
-					json.put("longitude", local.get(0).getLongitude());
+					array.put(local.get(0).getLongitude());
+					array.put(local.get(0).getLatitude());
 					json.put("speed", local.get(0).getSpeed());
-					json.put("date", local.get(0).getDatetime2());
-					json.put("direction", local.get(0).getDirection());
-					//array.put(json);
-					principal.put(local.get(0).getVehicle().getName(),json);
-				
+					
+					json.put("position", array);
+					arrayFinal.put(json);
 				}
+			
 				
 			}
 		}
 		 //principal.put("Cars",array);
-		entrega.put("Cars", principal);
+		entrega.put("cars", arrayFinal);
 		 resp.setCharacterEncoding("UTF-8");
 	      writer.print(entrega);
 	      writer.flush();
