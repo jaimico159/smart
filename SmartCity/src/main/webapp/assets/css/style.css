@@ -1,0 +1,27 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+
+.window {
+  display: flex; }
+  .window .consola {
+    height: 100%;
+    width: 14%;
+    font-family: 'Courier New', Courier, monospace; }
+    .window .consola .switch {
+      display: flex;
+      flex-direction: column;
+      align-items: center; }
+      .window .consola .switch .option {
+        display: flex; }
+  .window .mapwrapper {
+    position: absolute;
+    left: 15%;
+    height: 100%;
+    width: 85%; }
+    .window .mapwrapper #map {
+      height: 100%;
+      width: 100%; }
+
+/*# sourceMappingURL=style.css.map */

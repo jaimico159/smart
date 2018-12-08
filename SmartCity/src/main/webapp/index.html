@@ -3,18 +3,45 @@
   <head>
     <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
     <title>Hello App Engine</title>
+    <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
   </head>
 
   <body>
-    <h1>Hello App Engine!</h1>
-  
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href='/hello'>The servlet</a></td>
-      </tr>
-    </table>
+    <div class="window">
+    <div class="consola">
+      <div class="switch">
+        <h4>Cambiar mapa</h4>
+        <button id="mode" type="button" value="Real Time">Real Time</button>
+        <div id="interval">
+          <label for="fromdate">Desde:</label><br>
+          <input id="fromdate" type="date" name="fromdate"><br>
+          <label for="todate">Hasta:</label>
+          <input id="todate" type="date" name="todate"><br>
+        </div>
+      </div>
+    </div>
+    <div class="mapwrapper">
+      <div id="map"></div>
+    </div>
+    </div>
+    
+    <script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsE1_tWadD7-1IKaVXmlLgVLeCZm0K5e8&callback=initMap"></script>
+    <script src="./assets/js/Constantes.js"></script>
+    <script src="./assets/js/Helpers.js"></script>
+    <script src="./assets/js/Mapster.js"></script>
+    <script>
+      var global;
+      var mapa;
+      var mapa2;
+      function initMap(){
+        global = google;
+        mapa = new Mapster();
+        mapa.setElement('map');
+        mapa.setOptions(initOptions(-16.398764, -71.536883, 12, 'hybrid', 15, 6));
+        mapa.setMap();
+        mapa.RenderMap();
+        
+      }
+    </script>
   </body>
 </html>
