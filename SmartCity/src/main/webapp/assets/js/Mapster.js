@@ -254,6 +254,8 @@ class RealTimeMode {
     this.map = map;
   }
   setPolygons(){
+    this.polygons.length = 0;
+    this.cars.length = 0;
     console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
   }
   setCars(){
@@ -299,6 +301,7 @@ class HistoryMode {
     this.map = map;
   }
   setCars(){
+    this.cars.length = 0;
     //historycar
     console.log("Llamando a la funcion /getCars para llenar el arreglo de Polygons");
   }
@@ -319,7 +322,50 @@ class HistoryMode {
     google.maps.event.removeListener(this.zoomChangedId);
   }
 }
-
+class Console {
+  constructor() {
+    this.switch = null;
+    this.state = null;
+    this.fromdate = null;
+    this.todate = null;
+    this.mapster = null;
+  }
+  setMapsterInstance(mapster){
+    this.mapster = mapster;
+  }
+  setState(state){
+    this.state = state;
+  }
+  setFromDate(fromdate){
+    this.fromdate = document.getElementById(fromdate);
+  }
+  setToDate(todate){
+    this.todate = document.getElementById(todate);
+  }
+  setSwitch(button){
+    this.switch = document.getElementById(button);
+    let mapsterInstance = this.mapster;
+    console.log("ENRADNO");
+    this.switch.addEventListener('click', () => {
+      console.log("clockeando");
+      console.log(this);
+      if(this.switch.value === "History"){
+        this.switch.value = "Real Time";
+        this.switch.innerHTML = "Real Time";
+        mapsterInstance.RenderMap();
+        this.state = 2;
+        mapsterInstance.state = 2;
+      }
+      else if(this.switch.value === "Real Time"){
+        this.switch.value = "History";
+        this.switch.innerHTML = "History";
+        mapsterInstance.RenderMap();
+        this.state = 1;
+        mapsterInstance.state = 1;
+      }
+    });
+  }
+}
 
 /*
 * States {initial: 0,realtime: 1, history: 2}
@@ -330,26 +376,20 @@ class Mapster {
   constructor(){
     this.state = 1;
     this.element = null;
-    this.modeswitch = null;
+    this.consola = new Console();
     this.map = null;
-    this.points_of_interest = new Array();
+    this.points_of_interest = new Array;
     this.historymode = new HistoryMode();
     this.realtime = new RealTimeMode();
+    this.dragendId = null;
+    this.zoomChangedId = null;
   }
-  setSwitch(button){
-    let that = this;
-    this.modeswitch = document.getElementById(button);
-    this.modeswitch.addEventListener('click', () => {
-      if(this.value === "History"){
-        this.value = "Real Time";
-        this.innerHTML = "Real Time";
-      }
-      else if(this.value === "Real Time"){
-        this.value = "History";
-        this.innerHTML = "History";
-      }
-      that.RenderMap();
-    });
+  setConsole(){
+    this.consola.setMapsterInstance(this);
+    this.consola.setState(this.state);
+    this.consola.setFromDate("fromdate");
+    this.consola.setToDate("todate");
+    this.consola.setSwitch("mode");
   }
   setElement(element){
     this.element = document.getElementById(element);
@@ -366,6 +406,18 @@ class Mapster {
     this.map.mapTypes.set('night', mapStyle('Noche', maptypenight));
     this.map.mapTypes.set('aubergine', mapStyle('Aubergine', maptypeaubergine));
     this.map.setMapTypeId('principal');
+    this.realtime.setMap(this.map);
+    this.historymode.setMap(this.map);
+    this.setConsole();
+    this.setInterestPoints();
+    let refresh = this.setInterestPoints;
+    this.dragendId = this.map.addListener('dragend', ()=>{
+      refresh();
+    });
+    this.zoomChangedId = this.map.addListener('zoom_changed', ()=>{
+      refresh();
+    });
+
   }
   addInterestPoint(jsonPoint){
     let point = new PointOfInterest();
@@ -376,28 +428,20 @@ class Mapster {
     point.setPosition(jsonPoint.position[0], jsonPoint.position[1]);
     point.setGoogleMarker();
     point.setInfoWindow("CONTENIDO");
-    this.points_of_interest.push();
+    this.points_of_interest.push(point);
   }
   setInterestPoints(){
-    this.points_of_interest.push();
+    this.points_of_interest.length = 0;
     console.log("Llamando a la funcion /getInterestPoints para llenar el arreglo de Puntos de Interes");
-  }
-  refreshData(){
-    //refresh Real Time
-    //refres History
-    this.setInterestPoints(); 
   }
   RenderMap(){
     if(this.state === 1){
       this.historymode.stopHistory();
       this.realtime.initRealTime();
-      this.state = 2;
     }
     else if(this.state === 2){
       this.realtime.stopLoop();
       this.historymode.initHistory();
-      this.state = 1;
     }
   }
 }
-

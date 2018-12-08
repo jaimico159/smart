@@ -11,17 +11,13 @@
     <div class="consola">
       <div class="switch">
         <h4>Cambiar mapa</h4>
-        <form action="/change" method="get">
-        <div class="option">
-          <label>Tiempo Real</label>
-          <input type="radio" value="real" name="type">
-        </div>
-        <div class="option">
-          <label>Historico</label>
-          <input type="radio" value="historico" name="type">
-        </div>
-        </form>
         <button id="mode" type="button" value="Real Time">Real Time</button>
+        <div id="interval">
+          <label for="fromdate">Desde:</label><br>
+          <input id="fromdate" type="date" name="fromdate"><br>
+          <label for="todate">Hasta:</label>
+          <input id="todate" type="date" name="todate"><br>
+        </div>
       </div>
     </div>
     <div class="mapwrapper">
