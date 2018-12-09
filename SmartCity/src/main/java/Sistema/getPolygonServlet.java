@@ -1,16 +1,14 @@
 package Sistema;
 
-
-
-
-
-
-
 import java.io.IOException;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,11 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.google.appengine.repackaged.com.google.common.io.CharStreams;
+import com.google.gson.JsonSerializer;
+
 import structure.Point;
 import utilities.PolygonUtilities;
 import utilities.buildPolygon2;
-
-
 
 @WebServlet(
 		name = "Polygons",
@@ -30,27 +30,30 @@ import utilities.buildPolygon2;
 		)
 @SuppressWarnings( "serial" )
 public class getPolygonServlet extends HttpServlet{
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		//esta clase retorna los polygonos de la BD en un JSON
-		resp.setContentType("application/json");
-		/*
-		String longSupDerecha=req.getParameter("longSupDerecha");
-		String latSupDerecha= req.getParameter("latSupDerecha");
-		String longSupIzquieda= req.getParameter("longSupIzquieda");
-		String latSupIzquieda= req.getParameter("latSupIzquieda");
-		String longInfDerecha= req.getParameter("longInfDerecha");
-		String latInfDerecha= req.getParameter("latInfDerecha");
-		String longInfIzquierda= req.getParameter("longInfIzquierda");
-		String latInfIzquierda= req.getParameter("latInfIzquierda");
-		*/
-		String longSupDerecha="1000";
-		String latSupDerecha= "1000";
-		String longSupIzquieda= "-1000";
-		String latSupIzquieda= "1000";
-		String longInfDerecha= "1000";
-		String latInfDerecha= "-1000";
-		String longInfIzquierda= "-1000";
-		String latInfIzquierda= "-1000";
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String test = CharStreams.toString(req.getReader());
+		test = test.replaceAll("\"", "");
+		test = test.substring(1, test.length()-1);
+		
+		//System.out.println(mapa);
+		Map<String,String> requestmap = new HashMap<String,String>();
+		List<String> lista = Arrays.asList(test.split(","));
+		String[] element;
+		for(String a:lista) {
+			element = a.split(":");
+			requestmap.put(element[0], element[1]);
+		}
+		System.out.println(requestmap);
+		
+		String longSupDerecha=requestmap.get("longSupDerecha");
+		String latSupDerecha= requestmap.get("latSupDerecha");
+		String longSupIzquieda= requestmap.get("longSupIzquieda");
+		String latSupIzquieda= requestmap.get("latSupIzquieda");
+		String longInfDerecha= requestmap.get("longInfDerecha");
+		String latInfDerecha= requestmap.get("latInfDerecha");
+		String longInfIzquierda= requestmap.get("longInfIzquierda");
+		String latInfIzquierda= requestmap.get("latInfIzquierda");
+		
 		buildPolygon2 polygon = new buildPolygon2();
 		PolygonUtilities Cpolygon = new PolygonUtilities();
 		PrintWriter writer = resp.getWriter();
@@ -86,7 +89,7 @@ public class getPolygonServlet extends HttpServlet{
                          }
 					 }
 				 }
-				 if(contador == 4) {
+				 //if(contador == 4) {
 					 recolector.put("id", aux.getId());
 					 recolector.put("name", aux.getName());
 					 recolector.put("description", aux.getDescription());
@@ -107,7 +110,7 @@ public class getPolygonServlet extends HttpServlet{
 					}
 					
 					 recolector.put("path", arfinal);
-				 }
+				 //}
 				 array.put(recolector);
 			 }
 			
@@ -115,6 +118,7 @@ public class getPolygonServlet extends HttpServlet{
 		 entrega.put("polygons", array);
 		 resp.setCharacterEncoding("UTF-8");
 	      writer.print(entrega);
+	      System.out.println("Hizo flush");
 	      writer.flush();
 		
        

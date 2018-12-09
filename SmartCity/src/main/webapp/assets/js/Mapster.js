@@ -219,16 +219,13 @@ class RealTimeCar extends Car {
 
 class Polygon {
   constructor(){
-    this.id = id;
-    this.element = element;
-    this.map = map;
-    this.name = name;
+    this.id = null;
+    this.map = null;
+    this.name = null;
+    this.gPolygon = null;
   }
   setId(id){
     this.id = id;
-  }
-  setElement(element){
-    this.element = element;
   }
   setMap(map){
     this.map = map;
@@ -236,8 +233,20 @@ class Polygon {
   setName(name){
     this.name = name;
   }
-  setGeoJson(){
-    this.geoJson = new DataJson();
+  build(arreglo){
+	let camino = [];
+	console.log(arreglo);
+	arreglo.forEach((element, index)=>{
+	  console.log(element[0]);
+	  console.log(element[1]);
+	  camino[index] = {lat: element[1], lng: element[0]};
+	});
+	this.gPolygon = new google.maps.Polygon({
+		paths: camino
+	});
+	this.gPolygon.setMap(this.map);
+	console.log(camino);
+	console.log(this.gPolygon);
   }
 }
 
@@ -254,9 +263,54 @@ class RealTimeMode {
     this.map = map;
   }
   setPolygons(){
-    this.polygons.length = 0;
+	let points = this.map.getBounds();
+	console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
+    this.polygons.forEach((element)=>{
+      element.gPolygon.setMap(null);
+    });
+	this.polygons.length = 0;
     this.cars.length = 0;
-    console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
+	let info = {
+	  "longSupDerecha": points.getSouthWest().lng(),
+	  "latSupDerecha": points.getNorthEast().lat(),
+	  "longSupIzquieda": points	.getNorthEast().lng(),
+	  "latSupIzquieda": points.getNorthEast().lat(),
+	  "longInfDerecha": points.getSouthWest().lng(),
+	  "latInfDerecha": points.getNorthEast().lat(),
+	  "longInfIzquierda": points.getNorthEast().lng(),
+	  "latInfIzquierda": points.getSouthWest().lat()
+	};
+	fetch('/getPolygons',{
+		method: 'POST',
+		body: JSON.stringify(info), // data can be `string` or {object}!
+		headers:{
+		  'Content-Type': 'application/json; charset=utf-8'
+		}					
+	}).then(response => {
+		console.log("FETCHING");
+		  if(response.ok) {
+			  console.log("EVERITHING WENT GOOD")
+		       return response.json()
+		   } else {
+			   console.log("ERROR");
+		       throw "Error en la llamada Ajax";
+		   }
+		  console.log("FINISHED");
+	  }).then(data => {
+	  // Work with JSON data here
+		  data.polygons.map( (element) => {
+		    console.log(this);
+		    let pol = new Polygon();
+		    pol.setId(element.id);
+		    pol.setName(element.name);
+		    pol.setMap(this.map);
+		    pol.build(element.path);
+		    this.polygons.push(pol);
+		  });
+	    console.log(data);
+	  }).catch(err => {
+	  console.log("ERROR");
+	});
   }
   setCars(){
     //realtime cars
@@ -378,7 +432,7 @@ class Mapster {
     this.element = null;
     this.consola = new Console();
     this.map = null;
-    this.points_of_interest = new Array;
+    this.points_of_interest = new Array();
     this.historymode = new HistoryMode();
     this.realtime = new RealTimeMode();
     this.dragendId = null;
@@ -406,10 +460,15 @@ class Mapster {
     this.map.mapTypes.set('night', mapStyle('Noche', maptypenight));
     this.map.mapTypes.set('aubergine', mapStyle('Aubergine', maptypeaubergine));
     this.map.setMapTypeId('principal');
-    this.realtime.setMap(this.map);
-    this.historymode.setMap(this.map);
-    this.setConsole();
-    this.setInterestPoints();
+    let mapita = this;
+    google.maps.event.addListenerOnce(mapita.map, 'bounds_changed', () => {
+        console.log(mapita.map);
+        mapita.realtime.setMap(mapita.map);
+        mapita.historymode.setMap(mapita.map);
+        mapita.setConsole();
+        mapita.setInterestPoints();
+    });
+    
     let refresh = this.setInterestPoints;
     this.dragendId = this.map.addListener('dragend', ()=>{
       refresh();
@@ -431,10 +490,11 @@ class Mapster {
     this.points_of_interest.push(point);
   }
   setInterestPoints(){
-    this.points_of_interest.length = 0;
     console.log("Llamando a la funcion /getInterestPoints para llenar el arreglo de Puntos de Interes");
   }
   RenderMap(){
+	google.maps.event.addListenerOnce(this.map, 'bounds_changed', () => {
+	console.log("Llamando render");
     if(this.state === 1){
       this.historymode.stopHistory();
       this.realtime.initRealTime();
@@ -443,5 +503,6 @@ class Mapster {
       this.realtime.stopLoop();
       this.historymode.initHistory();
     }
+	});
   }
 }

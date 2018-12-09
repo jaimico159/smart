@@ -9,8 +9,10 @@
 <body>
 <h1>Add Polygon</h1>
 <br>
-<form method="post" action="/addPolygon">
+<form method="post" action="/AddPolygon">
+<label>Name: </label><br>
 <input type="text" name="name"><br>
+<label>Path: </label><br>
 <input type="text" name="path"><br>
 <input type="submit" name = "submit" value="ENVIAR">
 </form>
