@@ -31,6 +31,7 @@ import utilities.buildPolygon2;
 @SuppressWarnings( "serial" )
 public class getPolygonServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		//esta clase retorna los polygonos de la BD en un JSON
 		resp.setContentType("application/json");
 		/*
 		String longSupDerecha=req.getParameter("longSupDerecha");
@@ -89,9 +90,9 @@ public class getPolygonServlet extends HttpServlet{
 					 recolector.put("id", aux.getId());
 					 recolector.put("name", aux.getName());
 					 recolector.put("description", aux.getDescription());
-					 JSONObject geometry = new JSONObject();
+			
 					 JSONArray arfinal = new JSONArray();
-					 JSONArray arfinal2 = new JSONArray();
+			
 					for(int k=0; k<=aux2.size();k++) {
 						JSONArray ar = new JSONArray();
 						if(k==aux2.size()) {

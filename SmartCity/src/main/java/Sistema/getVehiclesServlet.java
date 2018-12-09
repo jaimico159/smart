@@ -2,6 +2,7 @@ package Sistema;
 
 import java.io.IOException;
 
+
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -14,8 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.google.appengine.repackaged.com.google.gson.Gson;
-import java.lang.Object.*;
 
 import structure.Vehicle;
 import utilities.VehicleUtilities;;

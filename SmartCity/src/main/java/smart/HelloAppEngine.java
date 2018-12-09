@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.CloudDatastoreRemoteServiceConfig.AppId.Location;
 
-import Sistema.getInterestingZoneServlet;
+import Sistema.getInZonePolygonServlet;
 import structure.Point;
 import utilities.buildPolygon2;
 
@@ -21,7 +21,7 @@ import utilities.buildPolygon2;
 )
 public class HelloAppEngine extends HttpServlet {
 	private ObjectifyWebFilter webFiltrer; 
-	private getInterestingZoneServlet s;
+	private getInZonePolygonServlet s;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 

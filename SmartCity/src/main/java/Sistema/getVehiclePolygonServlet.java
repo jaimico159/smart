@@ -19,8 +19,8 @@ import utilities.PolygonUtilities;
 import utilities.VehicleUtilities;
 
 @WebServlet(
-		name = "eqdasdasdas",
-		urlPatterns = {"/qewqdwadasdd"}
+		name = "getVehiclePolygon",
+		urlPatterns = {"/getRealVehiclePolygon"}
 		)
 @SuppressWarnings( "serial" )
 
@@ -29,9 +29,10 @@ public class getVehiclePolygonServlet extends HttpServlet{
    private List<structure.Point> puntos;
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
+		//esta clase retorna el json con los vehiculos en tiempo real de un poligono
 		resp.setContentType("application/json");
 		PolygonUtilities Cpolygon = new PolygonUtilities();
+		//aca recibe el id del poligono
 		//String idPolygon=req.getParameter("id");
 		String idPolygon = "5770237022568448";
 		
@@ -44,21 +45,20 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		LocationUtilities Clocation = new LocationUtilities();
 	
 		structure.Polygon lista = Cpolygon.loadOnePolygon(idPolygon);
-		System.out.println(lista.getName());
+	
 		puntos = lista.getPoints();
-		System.out.println("hola");
+	
 		 System.out.println(puntos.size());
 		 for (Object i: puntos) {
 			 if(i instanceof structure.Point ) {
-				 System.out.println(((structure.Point)i).getLatitude()+","+((structure.Point)i).getLongitude());
-				 buildPolygon.addPoint(((structure.Point)i).getLatitude()+","+((structure.Point)i).getLongitude());
+				
+				 buildPolygon.addPoint(((structure.Point)i).getLongitude()+","+((structure.Point)i).getLatitude());
 			 }
 		 }
 		 buildPolygon.makePolygon();
 	
 		 
 		List<Object> vehicles = Cvehicle.loadVehicle();
-        JSONObject principal = new JSONObject();
         JSONObject entrega = new JSONObject();
         JSONArray arrayFinal = new JSONArray();
 		
@@ -74,8 +74,8 @@ public class getVehiclePolygonServlet extends HttpServlet{
 				}
 				//System.out.println(local.get(0).getLatitude());
 				//System.out.println(local.get(0).getLongitude());
-		
-				verificador = buildPolygon.coordinate_is_inside_polygon(local.get(0).getLatitude(), local.get(0).getLongitude());
+				
+				verificador = buildPolygon.coordinate_is_inside_polygon(local.get(0).getLongitude(), local.get(0).getLatitude());
 				System.out.println(local.get(0).getLatitude()+", "+ local.get(0).getLongitude());
 				System.out.println(verificador);
 				JSONObject json = new JSONObject();
