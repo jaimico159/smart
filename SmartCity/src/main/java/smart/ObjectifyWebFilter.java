@@ -111,15 +111,7 @@ public class ObjectifyWebFilter extends ObjectifyFilter {
 	}
 	
 	public List<Polygon> loadPolygon(){
-		List<Object> polygon = Cpolygon.loadPolygon();
-		List<Polygon> poly = new ArrayList<Polygon>();
-
-		 for (Object i: polygon) {
-			 if(i instanceof Polygon) {
-			 poly.add((Polygon)i);}
-		    }
-		 
-		 return poly;
+		 return Cpolygon.loadPolygon();
 	}
 	
 	public List<Location> loadHistorialVehicle(String vehicle){

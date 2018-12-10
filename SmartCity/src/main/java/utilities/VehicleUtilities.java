@@ -10,22 +10,17 @@ import structure.Vehicle;
 
 public class VehicleUtilities {
 	
-
-	public VehicleUtilities() {
-		
-	}
+	public VehicleUtilities() {	}
 	
 	public  void createVehicle(Vehicle vehicle) {
 		ObjectifyService.register(Vehicle.class);
-		ObjectifyService.begin();
-	 
-	     ofy().save().entity(vehicle).now();
-	                    
-	 }
+		ObjectifyService.begin(); 
+	    ofy().save().entity(vehicle).now();                
+	}
 	
-	public  List<Object> loadVehicle() {
+	public  List<Vehicle> loadVehicle() {
 		ObjectifyService.register(Vehicle.class);
-		List<Object> vehicle = ofy().load().list();
+		List<Vehicle> vehicle = ofy().load().type(Vehicle.class).list();
 
 		return vehicle;
 	}

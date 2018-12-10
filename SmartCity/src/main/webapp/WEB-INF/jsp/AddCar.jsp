@@ -4,14 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Add Position to Car</title>
+<title>Add Car</title>
 </head>
 <body>
-<h1>Add Position to Car</h1>
+<h1>Add Car</h1>
 <br>
-<form method="post" action="/addPolygon">
+<form method="post" action="/AddVehicle">
 <input type="text" name="name"><br>
-<input type="text" name="path"><br>
 <input type="submit" name = "submit" value="ENVIAR">
 </form>
 

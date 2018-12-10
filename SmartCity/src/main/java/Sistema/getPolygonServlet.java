@@ -21,6 +21,7 @@ import com.google.appengine.repackaged.com.google.common.io.CharStreams;
 import com.google.gson.JsonSerializer;
 
 import structure.Point;
+import structure.Polygon;
 import utilities.PolygonUtilities;
 import utilities.buildPolygon2;
 
@@ -57,7 +58,7 @@ public class getPolygonServlet extends HttpServlet{
 		buildPolygon2 polygon = new buildPolygon2();
 		PolygonUtilities Cpolygon = new PolygonUtilities();
 		PrintWriter writer = resp.getWriter();
-		List<Object> polygons = Cpolygon.loadPolygon();
+		List<Polygon> polygons = Cpolygon.loadPolygon();
 		
 		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
 		polygon.addPoint(longInfDerecha+","+latInfDerecha);
@@ -65,63 +66,48 @@ public class getPolygonServlet extends HttpServlet{
 		polygon.addPoint(longSupIzquieda+","+latSupIzquieda);
 		
 		polygon.makePolygon();
-		 JSONObject entrega = new JSONObject();
-		
+		JSONObject entrega = new JSONObject();
+		JSONArray array = new JSONArray();
 		 
-		 
-		 JSONArray array = new JSONArray();
-		 
-		 for (Object i: polygons) {
-			 JSONObject recolector = new JSONObject();
-			 if(i instanceof structure.Polygon) {
-				
-				 boolean verificador =false;
-				 int contador = 0;
-				 structure.Polygon aux = ((structure.Polygon)i);
-				 ArrayList<structure.Point> aux2 = new ArrayList<Point>();
-				 List<structure.Point> points = aux.getPoints();
-				 for(Object j : points ) {
-					 if(j instanceof structure.Point) {
-						 aux2.add((structure.Point)j);
-						 verificador = polygon.coordinate_is_inside_polygon(((structure.Point)j).getLongitude(), ((structure.Point)j).getLatitude());
-                         if(verificador==true) {
-                        	 contador++;
-                         }
-					 }
-				 }
-				 //if(contador == 4) {
-					 recolector.put("id", aux.getId());
-					 recolector.put("name", aux.getName());
-					 recolector.put("description", aux.getDescription());
-			
-					 JSONArray arfinal = new JSONArray();
-			
-					for(int k=0; k<=aux2.size();k++) {
-						JSONArray ar = new JSONArray();
-						if(k==aux2.size()) {
-							ar.put(aux2.get(0).getLatitude());
-							ar.put(aux2.get(0).getLongitude());
-							arfinal.put(ar);
-						}else {
-						ar.put(aux2.get(k).getLatitude());
-						ar.put(aux2.get(k).getLongitude());
-						arfinal.put(ar);}
-						
-					}
-					
-					 recolector.put("path", arfinal);
-				 //}
-				 array.put(recolector);
+		for (Polygon aux: polygons) {
+			 JSONObject recolector = new JSONObject();		 	
+			 boolean verificador =false;
+			 int contador = 0;
+			 ArrayList<Point> aux2 = new ArrayList<Point>();
+			 List<Point> points = aux.getPoints();
+			 for(Point j : points ) {
+			 	 aux2.add((structure.Point)j);
+				 verificador = polygon.coordinate_is_inside_polygon(j.getLongitude(), j.getLatitude());
+                 if(verificador==true) {
+                	 contador++;
+                 }
 			 }
-			
-		    }
-		 entrega.put("polygons", array);
-		 resp.setCharacterEncoding("UTF-8");
-	      writer.print(entrega);
-	      System.out.println("Hizo flush");
-	      writer.flush();
-		
-       
+			 recolector.put("id", aux.getId());
+			 recolector.put("name", aux.getName());
+			 recolector.put("description", aux.getDescription());
+
+			 JSONArray arfinal = new JSONArray();
+	
+			 for(int k=0; k<=aux2.size();k++) {
+				JSONArray ar = new JSONArray();
+				if(k==aux2.size()) {
+					ar.put(aux2.get(0).getLatitude());
+					ar.put(aux2.get(0).getLongitude());
+					arfinal.put(ar);
+				}else {
+				ar.put(aux2.get(k).getLatitude());
+				ar.put(aux2.get(k).getLongitude());
+				arfinal.put(ar);}
+				
+			 }
+			 recolector.put("path", arfinal);
+			 array.put(recolector);
+		}
+		entrega.put("polygons", array);
+		resp.setCharacterEncoding("UTF-8");
+	    writer.print(entrega);
+	    System.out.println("Hizo flush");
+	    writer.flush();
 	}
 }
 

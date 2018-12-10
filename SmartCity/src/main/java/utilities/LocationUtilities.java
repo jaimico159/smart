@@ -29,10 +29,18 @@ public class LocationUtilities {
 	                    
 	 }
 	
+	public  void createLocation(Location location) {
+		ObjectifyService.register(Location.class);
+		ObjectifyService.begin();
+	 
+	    ofy().save().entity(location).now();
+	                    
+	 }
+	
 	public  Iterable<Location> loadHistorical(Vehicle vehicle) {
 		ObjectifyService.register(Location.class);
 		ObjectifyService.register(Vehicle.class);
-		Iterable<Location> subordinates = ofy().load().type(Location.class).filter("vehicle", vehicle);
+		Iterable<Location> subordinates = ofy().load().type(Location.class).filter("id", vehicle);
 
 		return subordinates;
 	}

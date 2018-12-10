@@ -1,4 +1,4 @@
-package structure;
+																																																																																																																package structure;
 
 import java.util.Date;
 
@@ -20,7 +20,7 @@ public class Location {
 	public Location() {
 		ObjectifyFactory f = new ObjectifyFactory();
 	    Key<Location> key = f.allocateId(Location.class);
-	this.setId(key.getId());
+	    this.setId(key.getId());
 	}
 	public long getId() {
 		return id;
@@ -64,6 +64,4 @@ public class Location {
 	public void setDirection(double direction) {
 		this.direction = direction;
 	}
-	
-
 }

@@ -58,12 +58,12 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		 buildPolygon.makePolygon();
 	
 		 
-		List<Object> vehicles = Cvehicle.loadVehicle();
+		List<Vehicle> vehicles = Cvehicle.loadVehicle();
         JSONObject entrega = new JSONObject();
         JSONArray arrayFinal = new JSONArray();
 		
 		
-		for(Object i: vehicles) {
+		for(Vehicle i: vehicles) {
 			boolean verificador = true;
 			List<Location> local = new ArrayList<Location>();
 			if(i instanceof Vehicle) {

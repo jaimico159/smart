@@ -26,9 +26,9 @@ public class PolygonUtilities {
 	                    
 	 }
 	
-	public  List<Object> loadPolygon() {
+	public  List<Polygon> loadPolygon() {
 		ObjectifyService.register(Polygon.class);
-		List<Object> polygon = ofy().load().list();
+		List<Polygon> polygon = ofy().load().type(Polygon.class).list();
 
 		return polygon;
 	}

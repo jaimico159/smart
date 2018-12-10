@@ -31,13 +31,13 @@ public class getVehiclesServlet extends HttpServlet{
 		resp.setContentType("application/json");
 		
 		VehicleUtilities Cvehicle = new VehicleUtilities();
-		List<Object>vehicles = Cvehicle.loadVehicle();
+		List<Vehicle>vehicles = Cvehicle.loadVehicle();
 		PrintWriter writer = resp.getWriter();
 		JSONObject principal = new JSONObject();
 		
 		JSONArray array = new JSONArray();
 		
-		 for (Object i: vehicles) {
+		 for (Vehicle i: vehicles) {
 			 JSONObject json = new JSONObject();
 			 if(i instanceof Vehicle) {
 				 json.put("name", ((Vehicle)i).getName());
