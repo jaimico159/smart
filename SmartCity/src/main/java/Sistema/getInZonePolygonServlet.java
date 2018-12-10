@@ -43,7 +43,7 @@ public class getInZonePolygonServlet extends HttpServlet {
 		System.out.println(puntos.size());
 		for (Object i : puntos) {
 			if (i instanceof structure.Point) {
-				buildPolygon.addPoint(((structure.Point) i).getLongitude() + "," + ((structure.Point) i).getLatitude());
+				buildPolygon.addPoint(((structure.Point) i).getLatitude() + "," + ((structure.Point) i).getLongitude());
 			}
 		}
 		buildPolygon.makePolygon();
@@ -57,14 +57,14 @@ public class getInZonePolygonServlet extends HttpServlet {
 			if (j instanceof Interesting_Zone) {
 		
 				Interesting_Zone aux = ((Interesting_Zone) j);
-				verificador = buildPolygon.coordinate_is_inside_polygon(aux.getLongitude(), aux.getLatitude());
+				verificador = buildPolygon.coordinate_is_inside_polygon(aux.getLatitude(), aux.getLongitude());
 				JSONObject json = new JSONObject();
 				JSONArray arrayCoordenadas = new JSONArray();
 				if(verificador==true) {
 					json.put("id", aux.getId());
 					json.put("name",aux.getName());
-					arrayCoordenadas.put(aux.getLongitude());
 					arrayCoordenadas.put(aux.getLatitude());
+					arrayCoordenadas.put(aux.getLongitude());
 					json.put("position",arrayCoordenadas );
 					json.put("description", aux.getDescription());
 				

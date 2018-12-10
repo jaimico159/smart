@@ -86,10 +86,13 @@ public class ObjectifyWebFilter extends ObjectifyFilter {
 	public void createPolygon(String name, String text, int status ) {
 		Polygon polygon = new Polygon();
 		List<Point> points = new ArrayList();
-		points.add(new Point(1.1,2.1,1));
-		points.add(new Point(2.1,2.1,2));
-		points.add(new Point(1.1,5.1,3));
-		points.add(new Point(2.1,5.1,4));
+		points.add(new Point(16.97274101999902,-33.57421875,1));
+		points.add(new Point(11.178401873711785,-26.894531249999996,2));
+		points.add(new Point(13.410994034321702,-1.23046875,3));
+		points.add(new Point(22.917922936146045,16.69921875,4));
+		points.add(new Point(35.02999636902566,-0.52734375,5));
+		points.add(new Point(38.54816542304656,-20.91796875,6));
+		points.add(new Point(16.97274101999902,-33.57421875,7));
 		polygon.setName(name);
 		polygon.setDescription(text);
 		polygon.setStatus(1);

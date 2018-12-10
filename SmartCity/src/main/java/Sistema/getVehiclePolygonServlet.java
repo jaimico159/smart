@@ -52,7 +52,7 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		 for (Object i: puntos) {
 			 if(i instanceof structure.Point ) {
 				
-				 buildPolygon.addPoint(((structure.Point)i).getLongitude()+","+((structure.Point)i).getLatitude());
+				 buildPolygon.addPoint(((structure.Point)i).getLatitude()+","+((structure.Point)i).getLongitude());
 			 }
 		 }
 		 buildPolygon.makePolygon();
@@ -75,15 +75,14 @@ public class getVehiclePolygonServlet extends HttpServlet{
 				//System.out.println(local.get(0).getLatitude());
 				//System.out.println(local.get(0).getLongitude());
 				
-				verificador = buildPolygon.coordinate_is_inside_polygon(local.get(0).getLongitude(), local.get(0).getLatitude());
-				System.out.println(local.get(0).getLatitude()+", "+ local.get(0).getLongitude());
-				System.out.println(verificador);
+				verificador = buildPolygon.coordinate_is_inside_polygon(local.get(0).getLatitude(), local.get(0).getLongitude());
+				
 				JSONObject json = new JSONObject();
 				JSONArray array = new JSONArray();
 				if(verificador == true) {
-					json.put("id", local.get(0).getId());
-					array.put(local.get(0).getLongitude());
+					json.put("id", ((Vehicle) i).getName());
 					array.put(local.get(0).getLatitude());
+					array.put(local.get(0).getLongitude());
 					json.put("speed", local.get(0).getSpeed());
 					
 					json.put("position", array);

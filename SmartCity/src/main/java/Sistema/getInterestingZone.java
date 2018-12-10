@@ -50,10 +50,10 @@ public class getInterestingZone extends HttpServlet {
 		PrintWriter writer = resp.getWriter();
 		
 		
-		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
-		polygon.addPoint(longInfDerecha+","+latInfDerecha);
-		polygon.addPoint(longSupDerecha+","+latSupDerecha);
-		polygon.addPoint(longSupIzquieda+","+latSupIzquieda);
+		polygon.addPoint(latInfIzquierda+","+longInfIzquierda);
+		polygon.addPoint(latInfDerecha+","+longInfDerecha);
+		polygon.addPoint(latSupDerecha+","+longSupDerecha);
+		polygon.addPoint(latSupIzquieda+","+longSupIzquieda);
 		
 		polygon.makePolygon();
 		 JSONObject entrega = new JSONObject();
@@ -61,20 +61,20 @@ public class getInterestingZone extends HttpServlet {
 		InterestingZoneUtilities Czone = new InterestingZoneUtilities();
 		List<Object> zones = Czone.loadZone();
 		JSONArray arrayFinal = new JSONArray();
-		System.out.println("hola");
+		
 		for (Object j : zones) {
 			boolean verificador = false;
 			if (j instanceof Interesting_Zone) {
 				
 				Interesting_Zone aux = ((Interesting_Zone) j);
-				verificador = polygon.coordinate_is_inside_polygon(aux.getLongitude(),aux.getLatitude());
+				verificador = polygon.coordinate_is_inside_polygon(aux.getLatitude(),aux.getLongitude());
 				JSONObject json = new JSONObject();
 				JSONArray arrayCoordenadas = new JSONArray();
 				if(verificador==true) {
 					json.put("id", aux.getId());
 					json.put("name",aux.getName());
-					arrayCoordenadas.put(aux.getLongitude());
 					arrayCoordenadas.put(aux.getLatitude());
+					arrayCoordenadas.put(aux.getLongitude());
 					json.put("position",arrayCoordenadas );
 					json.put("description", aux.getDescription());
 				

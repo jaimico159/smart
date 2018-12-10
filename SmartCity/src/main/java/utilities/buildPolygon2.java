@@ -23,8 +23,8 @@ public class buildPolygon2
 
     //Convert the strings to doubles.  
     for(String s : polygon_lat_long_pairs){ 
-     long_array.add(Double.parseDouble(s.split(",")[0])); 
-     lat_array.add(Double.parseDouble(s.split(",")[1])); 
+     lat_array.add(Double.parseDouble(s.split(",")[0])); 
+     long_array.add(Double.parseDouble(s.split(",")[1])); 
    
     } 
 
@@ -32,7 +32,7 @@ public class buildPolygon2
 
 } 
 public  boolean coordinate_is_inside_polygon(
-    double longitude, double latitude) 
+		double latitude,double longitude) 
 {  
      int i; 
      double angle=0; 

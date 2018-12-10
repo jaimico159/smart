@@ -36,7 +36,7 @@ public class HelloAppEngine extends HttpServlet {
 		//webFiltrer.createLocation("auto1", 1.9231231, 3.3123, 50, 1);
 		//webFiltrer.createLocation("auto3", 1.9231231, 3.0123, 50, 1);
 		//webFiltrer.createLocation("auto1", 5.21111, 1.9123, 46, 1);
-		//webFiltrer.createPolygon("poligono3", "holi2", 1);
+		webFiltrer.createPolygon("poligono4", "holi2", 1);
 
 	//List<structure.Location> locations = webFiltrer.loadHistorialVehicle("auto2");
 		// s = new getInterestingZoneServlet();

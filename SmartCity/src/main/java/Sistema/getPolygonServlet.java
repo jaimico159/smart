@@ -56,10 +56,10 @@ public class getPolygonServlet extends HttpServlet{
 		PrintWriter writer = resp.getWriter();
 		List<Object> polygons = Cpolygon.loadPolygon();
 		
-		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
-		polygon.addPoint(longInfDerecha+","+latInfDerecha);
-		polygon.addPoint(longSupDerecha+","+latSupDerecha);
-		polygon.addPoint(longSupIzquieda+","+latSupIzquieda);
+		polygon.addPoint(latInfIzquierda+","+longInfIzquierda);
+		polygon.addPoint(latInfDerecha+","+longInfDerecha);
+		polygon.addPoint(latSupDerecha+","+longSupDerecha);
+		polygon.addPoint(latSupIzquieda+","+longSupIzquieda);
 		
 		polygon.makePolygon();
 		 JSONObject entrega = new JSONObject();
@@ -80,13 +80,13 @@ public class getPolygonServlet extends HttpServlet{
 				 for(Object j : points ) {
 					 if(j instanceof structure.Point) {
 						 aux2.add((structure.Point)j);
-						 verificador = polygon.coordinate_is_inside_polygon(((structure.Point)j).getLongitude(), ((structure.Point)j).getLatitude());
+						 verificador = polygon.coordinate_is_inside_polygon(((structure.Point)j).getLatitude(), ((structure.Point)j).getLongitude());
                          if(verificador==true) {
                         	 contador++;
                          }
 					 }
 				 }
-				 if(contador == 4) {
+				 if(contador == aux2.size()) {
 					 recolector.put("id", aux.getId());
 					 recolector.put("name", aux.getName());
 					 recolector.put("description", aux.getDescription());
@@ -107,7 +107,7 @@ public class getPolygonServlet extends HttpServlet{
 					}
 					
 					 recolector.put("path", arfinal);
-				 }
+				}
 				 array.put(recolector);
 			 }
 			
