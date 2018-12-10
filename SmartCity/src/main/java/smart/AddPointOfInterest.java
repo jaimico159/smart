@@ -41,7 +41,7 @@ public class AddPointOfInterest extends HttpServlet {
 		//doGet(request, response);
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
-		String point[] = request.getParameter("point").split(",");
+		String point[] = request.getParameter("position").split(",");
 		double latitude = Double.parseDouble(point[0]);
 		double longitude = Double.parseDouble(point[1]);
 		PointOfInterestUtilities persister = new PointOfInterestUtilities();

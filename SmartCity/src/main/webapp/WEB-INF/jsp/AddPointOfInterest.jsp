@@ -10,10 +10,10 @@
 <h1>Add Car Position</h1>
 <br>
 <form method="post" action="/AddPointOfInterest">
-<label>Speed: </label><br>
-<input type="text" name="speed"><br>
-<label>Direction: </label><br>
-<input type="text" name="direction"><br>
+<label>Name: </label><br>
+<input type="text" name="name"><br>
+<label>Description: </label><br>
+<input type="text" name="description"><br>
 <label>Position: </label><br>
 <input type="text" name="position"><br>
 <input type="submit" name = "submit" value="ENVIAR">

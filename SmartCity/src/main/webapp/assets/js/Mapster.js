@@ -84,24 +84,30 @@ class PointOfInterest {
     this.iconurl = iconurl;
   }
   setPosition(lat, long){
-    if(this.position){
+    console.log("PONEIDO POSICION PTO");
+    if(this.position == null){
       this.position = new Coordinate(lat,long);
     }
     else {
       this.position.lat = lat;
-      this.position.long = long;
+      this.position.lng = long;
     }
-    if(this.gMarker){
+    if(this.gMarker != null){
+      console.log("MARKER NO NULL");
       this.gMarker.setPosition({lat: lat, lng: long});
+      console.log(gMarker);
     }
+    console.log(this.position);
   }
   setGoogleMarker(){
     this.gMarker = new google.maps.Marker({
       icon: this.iconurl,
-      map: this.map,
       position: {lat: this.position.lat, lng: this.position.long},
-      visible: false,
+      map: this.map,
+      visible: true
     });
+    console.log("<<<<<<<<<<<<<<<");
+    console.log(this.gMarker.getPosition().lat());
   }
   setInfoWindow(content){
     this.infoWindow = new InfoWindow(content, this.map, this.gMarker);
@@ -234,19 +240,14 @@ class Polygon {
     this.name = name;
   }
   build(arreglo){
-	let camino = [];
-	console.log(arreglo);
-	arreglo.forEach((element, index)=>{
-	  console.log(element[0]);
-	  console.log(element[1]);
-	  camino[index] = {lat: element[1], lng: element[0]};
-	});
-	this.gPolygon = new google.maps.Polygon({
-		paths: camino
-	});
-	this.gPolygon.setMap(this.map);
-	console.log(camino);
-	console.log(this.gPolygon);
+  	let camino = [];
+  	arreglo.forEach((element, index)=>{
+  	  camino[index] = {lat: element[1], lng: element[0]};
+  	});
+  	this.gPolygon = new google.maps.Polygon({
+  		paths: camino
+  	});
+  	this.gPolygon.setMap(this.map);
   }
 }
 
@@ -263,54 +264,49 @@ class RealTimeMode {
     this.map = map;
   }
   setPolygons(){
-	let points = this.map.getBounds();
-	console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
+  	let points = this.map.getBounds();
+  	console.log("Llamando a la funcion /getPolygons para llenar el arreglo de Polygons");
     this.polygons.forEach((element)=>{
       element.gPolygon.setMap(null);
     });
-	this.polygons.length = 0;
-    this.cars.length = 0;
-	let info = {
-	  "longSupDerecha": points.getSouthWest().lng(),
-	  "latSupDerecha": points.getNorthEast().lat(),
-	  "longSupIzquieda": points	.getNorthEast().lng(),
-	  "latSupIzquieda": points.getNorthEast().lat(),
-	  "longInfDerecha": points.getSouthWest().lng(),
-	  "latInfDerecha": points.getNorthEast().lat(),
-	  "longInfIzquierda": points.getNorthEast().lng(),
-	  "latInfIzquierda": points.getSouthWest().lat()
-	};
-	fetch('/getPolygons',{
-		method: 'POST',
-		body: JSON.stringify(info), // data can be `string` or {object}!
-		headers:{
-		  'Content-Type': 'application/json; charset=utf-8'
-		}					
-	}).then(response => {
-		console.log("FETCHING");
-		  if(response.ok) {
-			  console.log("EVERITHING WENT GOOD")
-		       return response.json()
-		   } else {
-			   console.log("ERROR");
-		       throw "Error en la llamada Ajax";
-		   }
-		  console.log("FINISHED");
-	  }).then(data => {
-	  // Work with JSON data here
-		  data.polygons.map( (element) => {
-		    console.log(this);
-		    let pol = new Polygon();
-		    pol.setId(element.id);
-		    pol.setName(element.name);
-		    pol.setMap(this.map);
-		    pol.build(element.path);
-		    this.polygons.push(pol);
-		  });
-	    console.log(data);
-	  }).catch(err => {
-	  console.log("ERROR");
-	});
+  	this.polygons.length = 0;
+      this.cars.length = 0;
+  	let info = {
+  	  "longSupDerecha": points.getSouthWest().lng(),
+  	  "latSupDerecha": points.getNorthEast().lat(),
+  	  "longSupIzquieda": points	.getNorthEast().lng(),
+  	  "latSupIzquieda": points.getNorthEast().lat(),
+  	  "longInfDerecha": points.getSouthWest().lng(),
+  	  "latInfDerecha": points.getNorthEast().lat(),
+  	  "longInfIzquierda": points.getNorthEast().lng(),
+  	  "latInfIzquierda": points.getSouthWest().lat()
+  	};
+  	fetch('/getPolygons',{
+  		method: 'POST',
+  		body: JSON.stringify(info), // data can be `string` or {object}!
+  		headers:{
+  		  'Content-Type': 'application/json; charset=utf-8'
+  		}					
+  	}).then(response => {
+  		  if(response.ok) {
+  			  return response.json()
+  		  } else {
+  			 console.log("ERROR");
+  		    throw "Error en la llamada Ajax";
+  		  }
+  	  }).then(data => {
+  	  // Work with JSON data here
+  		  data.polygons.map( (element) => {
+  		    let pol = new Polygon();
+  		    pol.setId(element.id);
+  		    pol.setName(element.name);
+  		    pol.setMap(this.map);
+  		    pol.build(element.path);
+  		    this.polygons.push(pol);
+  		  });
+  	  }).catch(err => {
+  	  console.log("ERROR");
+  	});
   }
   setCars(){
     //realtime cars
@@ -466,43 +462,89 @@ class Mapster {
         mapita.realtime.setMap(mapita.map);
         mapita.historymode.setMap(mapita.map);
         mapita.setConsole();
+        console.log("ASIGNANDO");
         mapita.setInterestPoints();
+        console.log("TERMINANDO D ASIGNAR");
     });
     
-    let refresh = this.setInterestPoints;
     this.dragendId = this.map.addListener('dragend', ()=>{
-      refresh();
+      this.setInterestPoints();
     });
     this.zoomChangedId = this.map.addListener('zoom_changed', ()=>{
-      refresh();
+      this.setInterestPoints();
     });
 
   }
-  addInterestPoint(jsonPoint){
+  addInterestPoint(pointObject){
     let point = new PointOfInterest();
-    point.setId(jsonPoint.id);
-    point.map(this.map);
-    point.setTitle(jsonPoint.title);
-    point.setIconUrl("icon.svg");
-    point.setPosition(jsonPoint.position[0], jsonPoint.position[1]);
+    point.setId(pointObject.id);
+    point.setMap(this.map);
+    point.setTitle(pointObject.name);
+    point.setIconUrl("https://img.icons8.com/ios/50/000000/golang-filled.png");
+    console.log(pointObject.position[1]);
+    console.log(pointObject.position[0]);
+    point.setPosition(pointObject.position[1], pointObject.position[0]);
     point.setGoogleMarker();
-    point.setInfoWindow("CONTENIDO");
+    point.setInfoWindow(pointObject.description);
+    console.log(point);
     this.points_of_interest.push(point);
+    
   }
   setInterestPoints(){
+    let points = this.map.getBounds();
+    this.points_of_interest.forEach((element)=>{
+      element.gMarker.setMap(null);
+    });
+    this.points_of_interest.length = 0;
     console.log("Llamando a la funcion /getInterestPoints para llenar el arreglo de Puntos de Interes");
+    let info = {
+      "longSupDerecha": points.getSouthWest().lng(),
+      "latSupDerecha": points.getNorthEast().lat(),
+      "longSupIzquieda": points .getNorthEast().lng(),
+      "latSupIzquieda": points.getNorthEast().lat(),
+      "longInfDerecha": points.getSouthWest().lng(),
+      "latInfDerecha": points.getNorthEast().lat(),
+      "longInfIzquierda": points.getNorthEast().lng(),
+      "latInfIzquierda": points.getSouthWest().lat()
+    };
+    fetch('/getPointsOfInterest',{
+      method: 'POST',
+      body: JSON.stringify(info), // data can be `string` or {object}!
+      headers:{
+        'Content-Type': 'application/json; charset=utf-8'
+      }         
+    }).then(response => {
+      console.log("FETCHING");
+        if(response.ok) {
+          console.log("EVERITHING WENT GOOD")
+             return response.json()
+         } else {
+           console.log("ERROR");
+             throw "Error en la llamada Ajax";
+         }
+        console.log("FINISHED");
+      }).then(data => {
+      // Work with JSON data here
+        data.points.forEach( (element) => {
+          console.log(element);
+          this.addInterestPoint(element);
+        });
+        console.log(data);
+      }).catch(err => {
+      console.log("ERROR");
+    });
   }
   RenderMap(){
-	google.maps.event.addListenerOnce(this.map, 'bounds_changed', () => {
-	console.log("Llamando render");
-    if(this.state === 1){
-      this.historymode.stopHistory();
-      this.realtime.initRealTime();
-    }
-    else if(this.state === 2){
-      this.realtime.stopLoop();
-      this.historymode.initHistory();
-    }
-	});
+  	google.maps.event.addListenerOnce(this.map, 'bounds_changed', () => {
+  	console.log("Llamando render");
+      if(this.state === 1){
+        this.historymode.stopHistory();
+        this.realtime.initRealTime();
+      }
+      else if(this.state === 2){
+        this.realtime.stopLoop();
+        this.historymode.initHistory();
+      }
+  	});
   }
 }

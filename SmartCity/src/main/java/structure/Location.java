@@ -12,7 +12,7 @@ import com.googlecode.objectify.annotation.Index;
 public class Location {
 	@Id Long id;
 	@Index Key<Vehicle> vehicle;
-	Date datetime2;
+	@Index Date datetime2;
 	@Index double latitude;
 	@Index double longitude;
 	@Index double speed;
