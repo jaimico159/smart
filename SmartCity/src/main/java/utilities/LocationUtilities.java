@@ -8,7 +8,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 
-import structure.Interesting_Zone;
+import structure.PointOfInterest;
 import structure.Location;
 import structure.Vehicle;
 

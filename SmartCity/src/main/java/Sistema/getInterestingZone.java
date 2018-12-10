@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import structure.Interesting_Zone;
+import structure.PointOfInterest;
 
-import utilities.InterestingZoneUtilities;
+import utilities.PointOfInterestUtilities;
 
 import utilities.buildPolygon2;
 
@@ -56,34 +56,29 @@ public class getInterestingZone extends HttpServlet {
 		polygon.addPoint(longSupIzquieda+","+latSupIzquieda);
 		
 		polygon.makePolygon();
-		 JSONObject entrega = new JSONObject();
+		JSONObject entrega = new JSONObject();
 	
-		InterestingZoneUtilities Czone = new InterestingZoneUtilities();
-		List<Object> zones = Czone.loadZone();
+		PointOfInterestUtilities retriever = new PointOfInterestUtilities();
+		List<PointOfInterest> zones = retriever.loadPointOfInterest();
 		JSONArray arrayFinal = new JSONArray();
 		System.out.println("hola");
-		for (Object j : zones) {
+		for (PointOfInterest aux : zones) {
 			boolean verificador = false;
-			if (j instanceof Interesting_Zone) {
 				
-				Interesting_Zone aux = ((Interesting_Zone) j);
-				verificador = polygon.coordinate_is_inside_polygon(aux.getLongitude(),aux.getLatitude());
-				JSONObject json = new JSONObject();
-				JSONArray arrayCoordenadas = new JSONArray();
-				if(verificador==true) {
-					json.put("id", aux.getId());
-					json.put("name",aux.getName());
-					arrayCoordenadas.put(aux.getLongitude());
-					arrayCoordenadas.put(aux.getLatitude());
-					json.put("position",arrayCoordenadas );
-					json.put("description", aux.getDescription());
-				
-					arrayFinal.put(json);
-				}
-
-			}
+			verificador = polygon.coordinate_is_inside_polygon(aux.getLongitude(),aux.getLatitude());
+			JSONObject json = new JSONObject();
+			JSONArray arrayCoordenadas = new JSONArray();
+			if(verificador==true) {
+				json.put("id", aux.getId());
+				json.put("name",aux.getName());
+				arrayCoordenadas.put(aux.getLongitude());
+				arrayCoordenadas.put(aux.getLatitude());
+				json.put("position",arrayCoordenadas );
+				json.put("description", aux.getDescription());
+			
+				arrayFinal.put(json);
+			}		
 		}
-
 
 		entrega.put("points", arrayFinal);
 		resp.setCharacterEncoding("UTF-8");

@@ -16,12 +16,12 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 
-import structure.Interesting_Zone;
+import structure.PointOfInterest;
 import structure.Point;
 import structure.Vehicle;
 import structure.Location;
 import structure.Polygon;
-import utilities.InterestingZoneUtilities;
+import utilities.PointOfInterestUtilities;
 import utilities.LocationUtilities;
 import utilities.PointUtilities;
 import utilities.PolygonUtilities;
@@ -34,13 +34,13 @@ import utilities.VehicleUtilities;
 @WebFilter(urlPatterns = {"/*"})
 public class ObjectifyWebFilter extends ObjectifyFilter {
 	private PointUtilities Cpoint;
-	private InterestingZoneUtilities Czone;
+	private PointOfInterestUtilities Czone;
 	private VehicleUtilities Cvehicle;
 	private LocationUtilities Clocation;
 	private PolygonUtilities Cpolygon;
 	public ObjectifyWebFilter() {
 		Cpoint = new PointUtilities();
-		Czone = new InterestingZoneUtilities();
+		Czone = new PointOfInterestUtilities();
 		Cvehicle = new VehicleUtilities();
 		Clocation = new LocationUtilities();
 		Cpolygon = new PolygonUtilities();
@@ -74,12 +74,12 @@ public class ObjectifyWebFilter extends ObjectifyFilter {
 	}
 	
 	public void createZone(String name, String text, double latitude, double longitude) {
-		Interesting_Zone zone = new Interesting_Zone();
+		PointOfInterest zone = new PointOfInterest();
 		zone.setDescription(text);
 		zone.setLatitude(latitude);
 		zone.setLongitude(longitude);
 		zone.setName(name);
-		this.Czone.createZone(zone);
+		this.Czone.createPointOfInterest(zone);
 	
 	}
 	

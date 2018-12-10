@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import structure.Interesting_Zone;
-import utilities.InterestingZoneUtilities;
+import structure.PointOfInterest;
+import utilities.PointOfInterestUtilities;
 import utilities.PolygonUtilities;
 import utilities.buildPolygon2;
 
@@ -26,15 +26,15 @@ public class getInZonePolygonServlet extends HttpServlet {
 		//Esta clase retorna un JSON con las zonas de interes en un poligono
 		
 		resp.setContentType("application/json");
-		PolygonUtilities Cpolygon = new PolygonUtilities();
+		PolygonUtilities retriever = new PolygonUtilities();
 		//recibe el id del poligono
 		// String idPolygon=req.getParameter("id");
 		String idPolygon = "5770237022568448";
 		List<structure.Point> puntos = new ArrayList<structure.Point>();
-		InterestingZoneUtilities Czone = new InterestingZoneUtilities();
+		PointOfInterestUtilities interestRetriver = new PointOfInterestUtilities();
 		buildPolygon2 buildPolygon = new buildPolygon2();
 		PrintWriter writer = resp.getWriter();
-		structure.Polygon polygon = Cpolygon.loadOnePolygon(idPolygon);
+		structure.Polygon polygon = retriever.loadOnePolygon(idPolygon);
 
 		System.out.println("hola");
 		System.out.println(polygon.getName());
@@ -48,30 +48,27 @@ public class getInZonePolygonServlet extends HttpServlet {
 		}
 		buildPolygon.makePolygon();
 
-		List<Object> zones = Czone.loadZone();
+		List<PointOfInterest> zones = interestRetriver.loadPointOfInterest();
 
         JSONObject entrega = new JSONObject();
         JSONArray arrayFinal = new JSONArray();
-		for (Object j : zones) {
-			boolean verificador = false;
-			if (j instanceof Interesting_Zone) {
-		
-				Interesting_Zone aux = ((Interesting_Zone) j);
-				verificador = buildPolygon.coordinate_is_inside_polygon(aux.getLongitude(), aux.getLatitude());
-				JSONObject json = new JSONObject();
-				JSONArray arrayCoordenadas = new JSONArray();
-				if(verificador==true) {
-					json.put("id", aux.getId());
-					json.put("name",aux.getName());
-					arrayCoordenadas.put(aux.getLongitude());
-					arrayCoordenadas.put(aux.getLatitude());
-					json.put("position",arrayCoordenadas );
-					json.put("description", aux.getDescription());
-				
-					arrayFinal.put(json);
-				}
-
+		for (PointOfInterest aux : zones) {
+			boolean verificador = false;			
+			verificador = buildPolygon.coordinate_is_inside_polygon(aux.getLongitude(), aux.getLatitude());
+			JSONObject json = new JSONObject();
+			JSONArray arrayCoordenadas = new JSONArray();
+			if(verificador==true) {
+				json.put("id", aux.getId());
+				json.put("name",aux.getName());
+				arrayCoordenadas.put(aux.getLongitude());
+				arrayCoordenadas.put(aux.getLatitude());
+				json.put("position",arrayCoordenadas );
+				json.put("description", aux.getDescription());
+			
+				arrayFinal.put(json);
 			}
+
+		
 		}
 		entrega.put("points", arrayFinal);
 		resp.setCharacterEncoding("UTF-8");

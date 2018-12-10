@@ -5,7 +5,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Interesting_Zone {
+public class PointOfInterest {
 	@Id Long id;
 	@Index String name;
 	String description;
