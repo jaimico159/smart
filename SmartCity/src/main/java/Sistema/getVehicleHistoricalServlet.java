@@ -74,9 +74,10 @@ public class getVehicleHistoricalServlet extends HttpServlet{
 				Date date = j.getDatetime2();
 				JSONArray arrayCoordenada = new JSONArray();
 				if(date.before(fin)) {
-					if(inicio.before(date)) {				       
-				        arrayCoordenada.put(j.getLongitude());
+					if(inicio.before(date)) {				  
 				        arrayCoordenada.put(j.getLatitude());
+				        
+				        arrayCoordenada.put(j.getLongitude());
 				        arrayFinal.put(arrayCoordenada);
 					}
 		        }

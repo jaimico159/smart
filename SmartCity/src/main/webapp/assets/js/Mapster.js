@@ -154,19 +154,20 @@ class HistoryCar extends Car {
   build(history){
 	console.log(history);
 	history.forEach((position) => {
-	  let marker = new google.maps.Marker({
+	  
+		let marker = new google.maps.Marker({
 	    icon: this.iconurl,
 	    map: this.map,
-	    position: {lat: this.position.lat, lng: this.position.lng},
+	    position: {lat: position[0], lng: position[1]},
 	    visible: true
 	  });
 	  marker.addListener('click', () => {
         if (marker.getAnimation() !== null) {
-          this.gMarker.forEach((marker) => {
+          this.gMarkers.forEach((marker) => {
             marker.setAnimation(null);
           });
 	    } else {
-	      this.gMarker.forEach((marker) => {
+	      this.gMarkers.forEach((marker) => {
 	        marker.setAnimation(google.maps.Animation.BOUNCE);
 	      });
 	    }
@@ -189,7 +190,7 @@ class HistoryCar extends Car {
 	this.map = null;
 	this.title = null;
 	this.iconurl = null;
-	this.gMarker.forEach((marker)=>{
+	this.gMarkers.forEach((marker)=>{
 	  marker.setMap(null);
 	});
   }
@@ -352,7 +353,7 @@ class RealTimeMode {
   		    car.setId(element.id);
   		    car.setMap(this.map);
   		    car.setTitle(element.description);
-  		    car.setIconUrl("./assets/icons/car.png");
+  		    car.setIconUrl("./assets/icons/car2.png");
   		    car.setPosition(element.position[0], element.position[1]);
   		    car.setGoogleMarker();
 	  	    car.setInfoWindow();
@@ -434,7 +435,7 @@ class HistoryMode {
   		    car.setId(element.id);
   		    car.setMap(this.map);
   		    car.setTitle(element.id);
-  		    car.setIconUrl("./assets/icons/car.png");
+  		    car.setIconUrl("./assets/icons/car2.png");
 	  	    car.build(element.history);
 	  	    
 	  	    this.cars.push(car);
@@ -548,7 +549,7 @@ class Mapster {
     this.map.mapTypes.set('dark', mapStyle('Oscuro', maptypedark));
     this.map.mapTypes.set('night', mapStyle('Noche', maptypenight));
     this.map.mapTypes.set('aubergine', mapStyle('Aubergine', maptypeaubergine));
-    this.map.setMapTypeId('principal');
+    
     let mapita = this;
     google.maps.event.addListenerOnce(mapita.map, 'bounds_changed', () => {
         console.log(mapita.map);
