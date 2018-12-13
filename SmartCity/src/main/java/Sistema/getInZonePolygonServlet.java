@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import IBuilder.ZonePolygonJson;
 import structure.PointOfInterest;
 import utilities.PointOfInterestUtilities;
 import utilities.PolygonUtilities;
@@ -49,30 +51,10 @@ public class getInZonePolygonServlet extends HttpServlet {
 		buildPolygon.makePolygon();
 
 		List<PointOfInterest> zones = interestRetriver.loadPointOfInterest();
-
-        JSONObject entrega = new JSONObject();
-        JSONArray arrayFinal = new JSONArray();
-		for (PointOfInterest aux : zones) {
-			boolean verificador = false;			
-			verificador = buildPolygon.coordinate_is_inside_polygon(aux.getLongitude(), aux.getLatitude());
-			JSONObject json = new JSONObject();
-			JSONArray arrayCoordenadas = new JSONArray();
-			if(verificador==true) {
-				json.put("id", aux.getId());
-				json.put("name",aux.getName());
-				arrayCoordenadas.put(aux.getLongitude());
-				arrayCoordenadas.put(aux.getLatitude());
-				json.put("position",arrayCoordenadas );
-				json.put("description", aux.getDescription());
-			
-				arrayFinal.put(json);
-			}
-
-		
-		}
-		entrega.put("points", arrayFinal);
+        ZonePolygonJson zoneJson = new ZonePolygonJson(buildPolygon, zones );
+        zoneJson.build();
 		resp.setCharacterEncoding("UTF-8");
-		writer.print(entrega);
+		writer.print(zoneJson.getJson());
 		writer.flush();
 
 	}

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Factories.objectFactory;
 import structure.Point;
 import structure.Polygon;
 import utilities.PolygonUtilities;
@@ -20,6 +21,7 @@ import utilities.PolygonUtilities;
 @WebServlet("/AddPolygon")
 public class AddPolygon extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public objectFactory factory = new objectFactory();
        
     /**
      * @see HttpServlet#HttpServlet()

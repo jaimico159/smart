@@ -8,7 +8,7 @@ import com.googlecode.objectify.annotation.Id;
 
 
 @Entity
-public class Point {
+public class Point implements IStructure{
 	@Id Long id;
 	double latitude;
 	double longitude;
@@ -21,10 +21,10 @@ public class Point {
 		
 	}
 	public Point() {}
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public double getLatitude() {

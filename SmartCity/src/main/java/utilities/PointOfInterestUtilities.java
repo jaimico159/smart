@@ -14,12 +14,11 @@ public class PointOfInterestUtilities {
 
 
 	public PointOfInterestUtilities() {
-		
+		ObjectifyService.begin();
 	}
 	
 	public  void createPointOfInterest(PointOfInterest zone) {
 		ObjectifyService.register(PointOfInterest.class);
-		
 	     ofy().save().entity(zone).now();
 	                    
 	 }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import IBuilder.RealVehicleJson;
 import structure.Location;
 import structure.Vehicle;
 import utilities.buildPolygon2;
@@ -28,7 +29,7 @@ public class getVehiclePolygonServlet extends HttpServlet{
  
    private List<structure.Point> puntos;
 	
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		//esta clase retorna el json con los vehiculos en tiempo real de un poligono
 		resp.setContentType("application/json");
 		PolygonUtilities Cpolygon = new PolygonUtilities();
@@ -42,7 +43,6 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		PrintWriter writer = resp.getWriter();
 	
 
-		LocationUtilities Clocation = new LocationUtilities();
 	
 		//structure.Polygon lista = Cpolygon.loadOnePolygon(idPolygon);
 	
@@ -57,44 +57,15 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		 }
 		 buildPolygon.makePolygon();*/
 	
-		 
+		
+		
 		List<Vehicle> vehicles = Cvehicle.loadVehicle();
-        JSONObject entrega = new JSONObject();
-        JSONArray arrayFinal = new JSONArray();
-		
-		
-		for(Vehicle i: vehicles) {
-			boolean verificador = true;
-			List<Location> local = new ArrayList<Location>();
-			if(i instanceof Vehicle) {
-				Iterable<Location>vehicleHis = Clocation.loadHistorical((Vehicle)i);
-				for(Object j: vehicleHis) {
-					if(j instanceof Location) {
-					local.add(0,(Location)j);}
-				}
-				//System.out.println(local.get(0).getLatitude());
-				//System.out.println(local.get(0).getLongitude());
-				
-				//verificador = buildPolygon.coordinate_is_inside_polygon(local.get(0).getLongitude(), local.get(0).getLatitude());
-				JSONObject json = new JSONObject();
-				JSONArray array = new JSONArray();
-				
-					json.put("id", local.get(0).getId());
-					array.put(local.get(0).getLongitude());
-					array.put(local.get(0).getLatitude());
-					json.put("speed", local.get(0).getSpeed());
-					
-					json.put("position", array);
-					arrayFinal.put(json);
-				
-			
-				
-			}
-		}
-		 //principal.put("Cars",array);
-		entrega.put("cars", arrayFinal);
+		RealVehicleJson json = new RealVehicleJson(vehicles);
+		json.build();
+  
+      
 		 resp.setCharacterEncoding("UTF-8");
-	      writer.print(entrega);
+	      writer.print(json.getJson());
 	      writer.flush();
 		
     //aqui va la escritura en JSON

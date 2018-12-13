@@ -3,22 +3,22 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 
 
+
 import java.util.List;
 
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 import structure.Point;
 
-public class PointUtilities {
+public class PointUtilities  {
 	
 
 	public PointUtilities() {
-		
+		ObjectifyService.begin();
 	}
 	
 	public  void createPoint(Point point) {
 		ObjectifyService.register(Point.class);
-		
 	     ofy().save().entity(point).now();
 	                    
 	 }

@@ -5,17 +5,17 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class PointOfInterest {
+public class PointOfInterest implements IStructure {
 	@Id Long id;
 	@Index String name;
 	String description;
 	@Index double latitude;
 	@Index double longitude;
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {

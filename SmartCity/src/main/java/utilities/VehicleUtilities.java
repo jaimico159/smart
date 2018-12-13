@@ -2,6 +2,7 @@ package utilities;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 
+
 import java.util.List;
 
 import com.googlecode.objectify.Key;
@@ -11,10 +12,13 @@ import structure.Vehicle;
 
 public class VehicleUtilities {
 	
-	public VehicleUtilities() {	}
+	public VehicleUtilities() {	
+		ObjectifyService.begin();
+	}
 	
 	public  Key<Vehicle> createVehicle(Vehicle vehicle) {
 		ObjectifyService.register(Vehicle.class);
+		
 		return ofy().save().entity(vehicle).now();                
 	}
 	

@@ -15,12 +15,11 @@ public class PolygonUtilities {
 	
 
 	public PolygonUtilities() {
-		
+		ObjectifyService.begin();
 	}
 	
 	public  void createPolygon(Polygon polygon) {
 		ObjectifyService.register(Polygon.class);
-		
 	     ofy().save().entity(polygon).now();
 	                    
 	 }

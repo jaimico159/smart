@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import com.google.appengine.repackaged.com.google.common.io.CharStreams;
 
+import IBuilder.InterestingZoneJson;
 import structure.PointOfInterest;
 
 import utilities.PointOfInterestUtilities;
@@ -78,32 +79,16 @@ public class getInterestingZone extends HttpServlet {
 		PrintWriter writer = resp.getWriter();
 		
 		
-		JSONObject entrega = new JSONObject();
+	
 	
 		PointOfInterestUtilities retriever = new PointOfInterestUtilities();
 		List<PointOfInterest> zones = retriever.loadPointOfInterest();
-		JSONArray arrayFinal = new JSONArray();
-		System.out.println("hola");
-		for (PointOfInterest aux : zones) {
-			boolean verificador = true;
-				
-			JSONObject json = new JSONObject();
-			JSONArray arrayCoordenadas = new JSONArray();
-			if(verificador==true) {
-				json.put("id", aux.getId());
-				json.put("name",aux.getName());
-				arrayCoordenadas.put(aux.getLongitude());
-				arrayCoordenadas.put(aux.getLatitude());
-				json.put("position",arrayCoordenadas );
-				json.put("description", aux.getDescription());
-			
-				arrayFinal.put(json);
-			}		
-		}
-
-		entrega.put("points", arrayFinal);
+		
+		
+		InterestingZoneJson json = new InterestingZoneJson(zones);
+		json.build();
 		resp.setCharacterEncoding("UTF-8");
-		writer.print(entrega);
+		writer.print(json.getJson());
 		writer.flush();
 
 	}
