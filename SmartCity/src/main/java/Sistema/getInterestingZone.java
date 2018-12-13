@@ -92,8 +92,8 @@ public class getInterestingZone extends HttpServlet {
 			if(verificador==true) {
 				json.put("id", aux.getId());
 				json.put("name",aux.getName());
-				arrayCoordenadas.put(aux.getLongitude());
 				arrayCoordenadas.put(aux.getLatitude());
+				arrayCoordenadas.put(aux.getLongitude());
 				json.put("position",arrayCoordenadas );
 				json.put("description", aux.getDescription());
 			

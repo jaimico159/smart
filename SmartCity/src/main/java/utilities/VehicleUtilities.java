@@ -20,6 +20,7 @@ public class VehicleUtilities {
 	
 	public  List<Vehicle> loadVehicle() {
 		ObjectifyService.register(Vehicle.class);
+		ObjectifyService.begin();
 		List<Vehicle> vehicle = ofy().load().type(Vehicle.class).list();
 
 		return vehicle;

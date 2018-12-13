@@ -9,6 +9,7 @@ import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 
 import structure.PointOfInterest;
+import structure.Polygon;
 import structure.Location;
 import structure.Vehicle;
 
@@ -25,10 +26,11 @@ public class LocationUtilities {
 	                    
 	 }
 	
-	public  Iterable<Location> loadHistorical(Vehicle vehicle) {
+	public List<Location> loadHistorical(Key<Vehicle> vehicle) {
 		ObjectifyService.register(Location.class);
 		ObjectifyService.register(Vehicle.class);
-		Iterable<Location> subordinates = ofy().load().type(Location.class).filterKey(vehicle);
+		ObjectifyService.begin();
+		List<Location> subordinates = ofy().load().type(Location.class).filter("vehicle", vehicle).list();
 
 		return subordinates;
 	}
@@ -47,6 +49,11 @@ public class LocationUtilities {
 
 		return locations;
 		
+	}
+
+	public Location getLocation(Key<Location> lastLocation) {
+		ObjectifyService.register(Location.class);
+		return ofy().load().key(lastLocation).now();
 	}
 
 }

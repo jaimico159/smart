@@ -76,7 +76,7 @@ public class getPolygonServlet extends HttpServlet{
 			 ArrayList<Point> aux2 = new ArrayList<Point>();
 			 List<Point> points = aux.getPoints();
 			 for(Point j : points ) {
-			 	 aux2.add((structure.Point)j);
+			 	 aux2.add(j);
 				 verificador = polygon.coordinate_is_inside_polygon(j.getLongitude(), j.getLatitude());
                  if(verificador==true) {
                 	 contador++;

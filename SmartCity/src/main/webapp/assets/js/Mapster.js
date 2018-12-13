@@ -2,9 +2,9 @@ function holamundo(){
   console.log("Hi causa");
 }
 class Coordinate {
-  constructor(lat, long){
+  constructor(lat, lng){
     this.lat = lat;
-    this.long = long;
+    this.lng = lng;
   }
 }
 class InfoWindow {
@@ -83,31 +83,26 @@ class PointOfInterest {
   setIconUrl(iconurl){
     this.iconurl = iconurl;
   }
-  setPosition(lat, long){
-    console.log("PONEIDO POSICION PTO");
+  setPosition(lat, lng){
     if(this.position == null){
-      this.position = new Coordinate(lat,long);
+      this.position = new Coordinate(lat,lng);
     }
     else {
       this.position.lat = lat;
-      this.position.lng = long;
+      this.position.lng = lng;
     }
     if(this.gMarker != null){
-      console.log("MARKER NO NULL");
-      this.gMarker.setPosition({lat: lat, lng: long});
-      console.log(gMarker);
+      this.gMarker.setPosition({lat: lat, lng: lng}); 
     }
-    console.log(this.position);
   }
   setGoogleMarker(){
     this.gMarker = new google.maps.Marker({
       icon: this.iconurl,
-      position: {lat: this.position.lat, lng: this.position.long},
+      position: {lat: this.position.lat, lng: this.position.lng},
       map: this.map,
       visible: true
     });
-    console.log("<<<<<<<<<<<<<<<");
-    console.log(this.gMarker.getPosition().lat());
+    
   }
   setInfoWindow(content){
     this.infoWindow = new InfoWindow(content, this.map, this.gMarker);
@@ -153,54 +148,71 @@ class Car {
 
 class HistoryCar extends Car {
   constructor(){
+	super();
     this.gMarkers = new Array();
-    this.jsonHistory = null;
   }
-  setHistory(positions){
-    let marker = new google.maps.Marker({
-      icon: this.iconurl,
-      map: this.map,
-      position: {lat: this.position.lat, lng: this.position.long},
-      visible: false,
-    });
-    this.gMarkers.push(marker);
-    marker.addListener('click', () => {
-      if (marker.getAnimation() !== null) {
-        marker.setAnimation(null);
-      } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      }
-    });
+  build(history){
+	console.log(history);
+	history.forEach((position) => {
+	  let marker = new google.maps.Marker({
+	    icon: this.iconurl,
+	    map: this.map,
+	    position: {lat: this.position.lat, lng: this.position.lng},
+	    visible: true
+	  });
+	  marker.addListener('click', () => {
+        if (marker.getAnimation() !== null) {
+          this.gMarker.forEach((marker) => {
+            marker.setAnimation(null);
+          });
+	    } else {
+	      this.gMarker.forEach((marker) => {
+	        marker.setAnimation(google.maps.Animation.BOUNCE);
+	      });
+	    }
+	  });
+	  this.gMarkers.push(marker);
+	});
   }
   show(){
-    this.gMarkers.map( (marker) => {
+    this.gMarkers.forEach( (marker) => {
       marker.setVisible(true);
-    })
+    });
   }
   hide(){
-    this.gMarkers.map( (marker) => {
+    this.gMarkers.forEach( (marker) => {
       marker.setVisible(false);
-    })
+    });
+  }
+  destroy(){
+	this.id = null;
+	this.map = null;
+	this.title = null;
+	this.iconurl = null;
+	this.gMarker.forEach((marker)=>{
+	  marker.setMap(null);
+	});
   }
   
 }
 
 class RealTimeCar extends Car {
   constructor(){
+	super();
     this.gMarker = null;
-    this.position = null;
     this.infoWindow = null;
+    this.position = null;
   }
   setPosition(lat, lng){
-    if(this.position){
-      this.position = new Coordinate(lat,long);
+    if(this.position == null){
+      this.position = new Coordinate(lat,lng);
     }
     else {
       this.position.lat = lat;
       this.position.lng = lng;
     }
     if(this.gMarker){
-      this.gMarker.setPosition({lat: lat, lng: long});
+      this.gMarker.setPosition({lat: lat, lng: lng});
     }
   }
   setGoogleMarker(){
@@ -249,6 +261,13 @@ class Polygon {
   	});
   	this.gPolygon.setMap(this.map);
   }
+  
+  show(){
+	  this.gPolygon.setMap(this.map);
+  }
+  hide(){
+	  this.gPolygon.setMap(null);
+  }
 }
 
 class RealTimeMode {
@@ -270,8 +289,7 @@ class RealTimeMode {
       element.gPolygon.setMap(null);
     });
   	this.polygons.length = 0;
-      this.cars.length = 0;
-  	let info = {
+    let info = {
   	  "longSupDerecha": points.getSouthWest().lng(),
   	  "latSupDerecha": points.getNorthEast().lat(),
   	  "longSupIzquieda": points	.getNorthEast().lng(),
@@ -322,29 +340,28 @@ class RealTimeMode {
   		}					
   	}).then(response => {
   		  if(response.ok) {
-  			  return response.json()
+  			  return response.json();
   		  } else {
-  			 console.log("ERROR");
+  			 console.log("ERROR EN AJAX");
   		    throw "Error en la llamada Ajax";
   		  }
   	  }).then(data => {
   	  // Work with JSON data here
-  		  data.cars.map( (element) => {
-  		    let car = new RealTimeCar();
+  		  data.cars.forEach( (element) => {
+  			let car = new RealTimeCar();
   		    car.setId(element.id);
   		    car.setMap(this.map);
-  		    car.setTile(element.description);
-  		    car.setIconUrl("https://img.icons8.com/ios/50/000000/golang-filled.png");
-	  	    console.log(element.position[1]);
-	  	    console.log(element.position[0]);
-	  	    car.setPosition(element.position[1], element.position[0]);
-	  	    car.setGoogleMarker();
-	  	    car.setInfoWindow(element.description);
-	  	    
+  		    car.setTitle(element.description);
+  		    car.setIconUrl("./assets/icons/car.png");
+  		    car.setPosition(element.position[0], element.position[1]);
+  		    car.setGoogleMarker();
+	  	    car.setInfoWindow();
+  		    
 	  	    this.cars.push(car);
-  		  });
+	  	  });
   	  }).catch(err => {
-  	  console.log("ERROR");
+  	  console.log(err);
+  	  throw err;
   	});
   }
   refreshData(){
@@ -362,16 +379,23 @@ class RealTimeMode {
     });
   }
   stopLoop(){
+	this.cars.forEach((car) => {
+		car.hide();
+	});
+	this.polygons.forEach((polygon) => {
+		polygon.hide();
+	});
     clearInterval(this.loopId);
     google.maps.event.removeListener(this.dragendId);
     google.maps.event.removeListener(this.zoomChangedId);
+    
   }
   initRealTime(){
     this.refreshData();
     this.initLoop();
   }
   stopRealTime(){
-    this.stopLoop;
+    this.stopLoop();
   }
 }
 
@@ -386,9 +410,39 @@ class HistoryMode {
     this.map = map;
   }
   setCars(){
+	this.cars.forEach((car)=>{
+      car.destroy();
+    });
     this.cars.length = 0;
-    //historycar
-    console.log("Llamando a la funcion /getCars para llenar el arreglo de Polygons");
+    console.log("Llamando a la funcion /getCars para llenar el historico");
+    fetch('/getHistory',{
+  		method: 'POST',
+  		headers:{
+  		  'Content-Type': 'application/json; charset=utf-8'
+  		}					
+  	}).then(response => {
+  		  if(response.ok) {
+  			  return response.json();
+  		  } else {
+  			 console.log("ERROR EN AJAX");
+  		    throw "Error en la llamada Ajax";
+  		  }
+  	  }).then(data => {
+  	  // Work with JSON data here
+  		  data.cars.forEach( (element) => {
+  			let car = new HistoryCar();
+  		    car.setId(element.id);
+  		    car.setMap(this.map);
+  		    car.setTitle(element.id);
+  		    car.setIconUrl("./assets/icons/car.png");
+	  	    car.build(element.history);
+	  	    
+	  	    this.cars.push(car);
+	  	  });
+  	  }).catch(err => {
+  	  console.log(err);
+  	  throw err;
+  	});
   }
   refreshData(){
     this.setCars();
@@ -403,7 +457,10 @@ class HistoryMode {
     });
   }
   stopHistory(){
-    google.maps.event.removeListener(this.dragendId);
+    this.cars.forEach((car)=>{
+    	car.hide();
+    });
+	google.maps.event.removeListener(this.dragendId);
     google.maps.event.removeListener(this.zoomChangedId);
   }
 }
@@ -433,20 +490,21 @@ class Console {
     console.log("ENRADNO");
     this.switch.addEventListener('click', () => {
       console.log("clockeando");
-      console.log(this);
       if(this.switch.value === "History"){
         this.switch.value = "Real Time";
         this.switch.innerHTML = "Real Time";
-        mapsterInstance.RenderMap();
-        this.state = 2;
-        mapsterInstance.state = 2;
+        this.state = 1;
+        mapsterInstance.state = 1;
+        mapsterInstance.historymode.stopHistory();
+        mapsterInstance.realtime.initRealTime();
       }
       else if(this.switch.value === "Real Time"){
         this.switch.value = "History";
         this.switch.innerHTML = "History";
-        mapsterInstance.RenderMap();
-        this.state = 1;
-        mapsterInstance.state = 1;
+        this.state = 2;
+        mapsterInstance.state = 2;
+        mapsterInstance.realtime.stopRealTime();
+        mapsterInstance.historymode.initHistory();
       }
     });
   }
@@ -515,10 +573,10 @@ class Mapster {
     point.setId(pointObject.id);
     point.setMap(this.map);
     point.setTitle(pointObject.name);
-    point.setIconUrl("https://img.icons8.com/ios/50/000000/golang-filled.png");
+    point.setIconUrl("./assets/icons/point_of_interest.svg");
     console.log(pointObject.position[1]);
     console.log(pointObject.position[0]);
-    point.setPosition(pointObject.position[1], pointObject.position[0]);
+    point.setPosition(pointObject.position[0], pointObject.position[1]);
     point.setGoogleMarker();
     point.setInfoWindow(pointObject.description);
     console.log(point);
@@ -577,7 +635,7 @@ class Mapster {
         this.realtime.initRealTime();
       }
       else if(this.state === 2){
-        this.realtime.stopLoop();
+        this.realtime.stopRealTime();
         this.historymode.initHistory();
       }
   	});

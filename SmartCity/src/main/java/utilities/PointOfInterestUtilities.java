@@ -26,8 +26,8 @@ public class PointOfInterestUtilities {
 	
 	public  List<PointOfInterest> loadPointOfInterest() {
 		ObjectifyService.register(PointOfInterest.class);
+		ObjectifyService.begin();
 		List<PointOfInterest> points = ofy().load().type(PointOfInterest.class).list();
-
 		return points;
 	}
 
