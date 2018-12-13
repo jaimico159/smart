@@ -1,6 +1,6 @@
-package IBuilder;
+package Builder;
 
-public abstract class AbstractXML implements IBuilder {
+public abstract class AbstractXMLBuilder implements Builder {
 
 	@Override
 	public void build() {

@@ -1,4 +1,4 @@
-package IBuilder;
+package Builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import Modules.Polygon.buildPolygon2;
 import structure.Point;
 import structure.Polygon;
 import structure.Vehicle;
-import utilities.buildPolygon2;
 
-public class PolygonJson extends AbstractJson {
+public class PolygonJson extends AbstractJsonBuilder {
 	
 	public List<Polygon> polygons;
 
@@ -22,7 +22,6 @@ public class PolygonJson extends AbstractJson {
     }
     
 	public void build() {
-		JSONObject entrega = new JSONObject();
 		JSONArray array = new JSONArray();
 		 
 		for (Polygon aux: polygons) {
@@ -32,7 +31,7 @@ public class PolygonJson extends AbstractJson {
 			 ArrayList<Point> aux2 = new ArrayList<Point>();
 			 List<Point> points = aux.getPoints();
 			 for(Point j : points ) {
-			 	 aux2.add((structure.Point)j);
+			 	 aux2.add(j);
 				 verificador = polygon.coordinate_is_inside_polygon(j.getLongitude(), j.getLatitude());
                  if(verificador==true) {
                 	 contador++;
@@ -59,8 +58,7 @@ public class PolygonJson extends AbstractJson {
 			 recolector.put("path", arfinal);
 			 array.put(recolector);
 		}
-		entrega.put("polygons", array);
-		
+		entrega.put("polygons", array);		
 	}
 	
 

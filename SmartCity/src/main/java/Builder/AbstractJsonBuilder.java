@@ -1,10 +1,10 @@
-package IBuilder;
+package Builder;
 
 import org.json.JSONObject;
 
-import utilities.buildPolygon2;
+import Modules.Polygon.buildPolygon2;
 
-public abstract class AbstractJson implements IBuilder {
+public abstract class AbstractJsonBuilder implements Builder {
 	
 	 protected JSONObject entrega = new JSONObject();
 	 protected buildPolygon2 polygon = new buildPolygon2();

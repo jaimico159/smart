@@ -20,11 +20,11 @@ import org.json.JSONObject;
 import com.google.appengine.repackaged.com.google.common.io.CharStreams;
 import com.google.gson.JsonSerializer;
 
-import IBuilder.PolygonJson;
+import Builder.PolygonJson;
+import Modules.Polygon.buildPolygon2;
 import structure.Point;
 import structure.Polygon;
 import utilities.PolygonUtilities;
-import utilities.buildPolygon2;
 
 @WebServlet(
 		name = "Polygons",
@@ -32,7 +32,7 @@ import utilities.buildPolygon2;
 		)
 @SuppressWarnings( "serial" )
 public class getPolygonServlet extends HttpServlet{
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String test = CharStreams.toString(req.getReader());
 		test = test.replaceAll("\"", "");
 		test = test.substring(1, test.length()-1);
@@ -59,7 +59,6 @@ public class getPolygonServlet extends HttpServlet{
 		buildPolygon2 polygon = new buildPolygon2();
 		PolygonUtilities Cpolygon = new PolygonUtilities();
 		PrintWriter writer = resp.getWriter();
-		
 		List<Polygon> polygons = Cpolygon.loadPolygon();
 		
 		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
@@ -69,11 +68,11 @@ public class getPolygonServlet extends HttpServlet{
 		
 		polygon.makePolygon();
 		
-		PolygonJson json = new PolygonJson(polygon, polygons);
-		json.build();
+		PolygonJson wrapper = new PolygonJson(polygon, polygons);
+		wrapper.build();
 		
 		resp.setCharacterEncoding("UTF-8");
-	    writer.print(json.getJson());
+	    writer.print(wrapper.getJson());
 	    System.out.println("Hizo flush");
 	    writer.flush();
 	}

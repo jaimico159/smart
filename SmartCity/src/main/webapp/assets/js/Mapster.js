@@ -450,6 +450,7 @@ class HistoryMode {
   }
   initHistory(){
     let that = this;
+    that.refreshData();
     this.dragendId = this.map.addListener('dragend', () => {
       that.refreshData();
     });

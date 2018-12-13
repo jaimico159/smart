@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import IBuilder.ZonePolygonJson;
+import Builder.ZonePolygonJson;
+import Modules.Polygon.buildPolygon2;
 import structure.PointOfInterest;
 import utilities.PointOfInterestUtilities;
 import utilities.PolygonUtilities;
-import utilities.buildPolygon2;
 
 @WebServlet(
 		name = "getIntZonepolygon", 
