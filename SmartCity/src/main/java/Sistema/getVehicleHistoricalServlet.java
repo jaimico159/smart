@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import com.googlecode.objectify.Key;
 
+import IBuilder.VehicleHistorical;
 import structure.Location;
 import structure.Vehicle;
 import utilities.LocationUtilities;
@@ -38,6 +39,8 @@ public class getVehicleHistoricalServlet extends HttpServlet{
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		LocationUtilities locationRetriever = new LocationUtilities();
 		VehicleUtilities vehiclesRetriever = new VehicleUtilities();
+		
+		VehicleUtilities Cvehicles = new VehicleUtilities();
 		//aqui van las fechas de inicio y fin de la peticion
 		//String fechaInicio = req.getParameter("fechaInicio");
 		//String fechaFin = req.getParameter("fechaFin");
@@ -91,6 +94,14 @@ public class getVehicleHistoricalServlet extends HttpServlet{
 		resp.setCharacterEncoding("UTF-8");
         writer.print(entrega);
         writer.flush();
+     
+		List<Vehicle> vehicles = Cvehicles.loadVehicle();
+        
+		VehicleHistorical json = new VehicleHistorical(vehicles, inicio, fin);
+	
+	  resp.setCharacterEncoding("UTF-8");
+      writer.print(json.getJson());
+      writer.flush();
    
 	}
 }

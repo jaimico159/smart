@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import IBuilder.RealVehicleJson;
 import structure.Location;
 import structure.Vehicle;
 import utilities.buildPolygon2;
@@ -83,6 +84,16 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		resp.setCharacterEncoding("UTF-8");
 	    writer.print(entrega);
 	    writer.flush();
+		
+		
+		List<Vehicle> vehicles = Cvehicle.loadVehicle();
+		RealVehicleJson json = new RealVehicleJson(vehicles);
+		json.build();
+  
+      
+		 resp.setCharacterEncoding("UTF-8");
+	      writer.print(json.getJson());
+	      writer.flush();
 		
     //aqui va la escritura en JSON
        

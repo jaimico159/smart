@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Factories.objectFactory;
 import structure.Point;
 import structure.Polygon;
 import structure.Vehicle;
@@ -21,6 +22,7 @@ import utilities.VehicleUtilities;
 @WebServlet("/AddVehicle")
 public class AddVehicle extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public objectFactory factory = new objectFactory();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -33,7 +35,7 @@ public class AddVehicle extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
@@ -41,12 +43,15 @@ public class AddVehicle extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
+		//Vehicle car = factory.makeVehicle();
 		Vehicle car = new Vehicle();
 		String name = request.getParameter("name");
 		car.setName(name);
+		System.out.println(car.getName());
+		//VehicleUtilities persister = factory.makeVehicleUtilities();
 		VehicleUtilities persister = new VehicleUtilities();
 		persister.createVehicle(car);
 	}

@@ -6,7 +6,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Vehicle {
+public class Vehicle implements IStructure{
 	@Id Long id;
 	@Index String name;
 	@Index Key<Location> last_location;
@@ -22,6 +22,9 @@ public class Vehicle {
 	}
 	public void setLastLocation(Key<Location> last_location) {
 		this.last_location = last_location;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public Key<Location> getLastLocation() {
 		return this.last_location;

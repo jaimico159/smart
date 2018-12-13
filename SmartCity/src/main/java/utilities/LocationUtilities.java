@@ -16,12 +16,12 @@ import structure.Vehicle;
 public class LocationUtilities {
 	
 	public LocationUtilities() {
-		
+		ObjectifyService.begin();
 	}
 	
 	public Key<Location> createLocation(Location location) {
 		ObjectifyService.register(Location.class);
-		
+	
 	    return ofy().save().entity(location).now();
 	                    
 	 }
@@ -49,6 +49,10 @@ public class LocationUtilities {
 
 		return locations;
 		
+	}
+	public Location getLastLocation(Key<Location> clave) {
+		ObjectifyService.register(Location.class);
+		return ofy().load().key(clave).now();
 	}
 
 	public Location getLocation(Key<Location> lastLocation) {

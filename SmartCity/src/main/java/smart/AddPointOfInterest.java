@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Factories.objectFactory;
 import structure.PointOfInterest;
 import utilities.PointOfInterestUtilities;
 
@@ -16,6 +17,7 @@ import utilities.PointOfInterestUtilities;
 @WebServlet("/AddPointOfInterest")
 public class AddPointOfInterest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public objectFactory factory = new objectFactory();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -44,8 +46,8 @@ public class AddPointOfInterest extends HttpServlet {
 		String point[] = request.getParameter("position").split(",");
 		double latitude = Double.parseDouble(point[0]);
 		double longitude = Double.parseDouble(point[1]);
-		PointOfInterestUtilities persister = new PointOfInterestUtilities();
-		PointOfInterest zone = new PointOfInterest();
+		PointOfInterestUtilities persister = factory.makePointOfInterestUtilities();
+		PointOfInterest zone = factory.makePointOfInterest();
 		zone.setDescription(description);
 		zone.setLatitude(latitude);
 		zone.setLongitude(longitude);

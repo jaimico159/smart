@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.Key;
 
+import Factories.objectFactory;
 import structure.Location;
 import structure.Point;
 import structure.Polygon;
@@ -26,6 +27,7 @@ import utilities.VehicleUtilities;
 @WebServlet("/AddVehiclePosition")
 public class AddVehiclePosition extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public objectFactory factory = new objectFactory();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -49,7 +51,7 @@ public class AddVehiclePosition extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
-		Location location = new Location();
+		Location location = factory.makeLocation();
 		String key = request.getParameter("carKey");
 		String speed = request.getParameter("speed");
 		String direction = request.getParameter("direction");
@@ -66,8 +68,8 @@ public class AddVehiclePosition extends HttpServlet {
 		Key<Vehicle> clave = Key.create(Vehicle.class, Long.parseLong(key));
 		location.setVehicle(clave);
 		
-		LocationUtilities persister = new LocationUtilities();
-		VehicleUtilities retriever = new VehicleUtilities();
+		LocationUtilities persister = factory.makeLocationUtilities();
+		VehicleUtilities retriever = factory.makeVehicleUtilities();
 		Vehicle vehicle = retriever.getVehicle(clave);
 		Key<Location> last_location = persister.createLocation(location);
 		vehicle.setLastLocation(last_location);

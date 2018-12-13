@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Location {
+public class Location implements IStructure {
 	@Id Long id;
 	@Index Key<Vehicle> vehicle;
 	@Index Date datetime2;
@@ -22,10 +22,10 @@ public class Location {
 	    Key<Location> key = f.allocateId(Location.class);
 	    this.setId(key.getId());
 	}
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public Key<Vehicle> getVehicle() {
