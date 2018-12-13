@@ -65,9 +65,13 @@ public class AddVehiclePosition extends HttpServlet {
 		location.setLongitude(lng);
 		Key<Vehicle> clave = Key.create(Vehicle.class, Long.parseLong(key));
 		location.setVehicle(clave);
-			
+		
 		LocationUtilities persister = new LocationUtilities();
-		persister.createLocation(location);
+		VehicleUtilities retriever = new VehicleUtilities();
+		Vehicle vehicle = retriever.getVehicle(clave);
+		Key<Location> last_location = persister.createLocation(location);
+		vehicle.setLastLocation(last_location);
+		retriever.updateVehicle(vehicle);
 		
 	}
 

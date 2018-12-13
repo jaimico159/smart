@@ -30,25 +30,22 @@ public class getVehiclesServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("application/json");
 		
-		VehicleUtilities Cvehicle = new VehicleUtilities();
-		List<Vehicle>vehicles = Cvehicle.loadVehicle();
+		VehicleUtilities retriever = new VehicleUtilities();
+		List<Vehicle> vehicles = retriever.loadVehicle();
 		PrintWriter writer = resp.getWriter();
 		JSONObject principal = new JSONObject();
 		
 		JSONArray array = new JSONArray();
 		
-		 for (Vehicle i: vehicles) {
-			 JSONObject json = new JSONObject();
-			 if(i instanceof Vehicle) {
-				 json.put("name", ((Vehicle)i).getName());
-				 array.put(json);
-			 }
-			  
-		    }
-		 principal.put("car",array);
-		 resp.setCharacterEncoding("UTF-8");
-	      writer.print(principal.toString());
-	      writer.flush();
+		for (Vehicle vehicle: vehicles) {
+			JSONObject json = new JSONObject();
+		 	json.put("name", vehicle.getName());
+			array.put(json);	  
+		}
+		principal.put("car",array);
+		resp.setCharacterEncoding("UTF-8");
+	    writer.print(principal.toString());
+	    writer.flush();
 		//aqui va el JSON
 		//agregar redireccion resp.sendRedirect("index.html");
 	}

@@ -18,8 +18,7 @@ public class PointUtilities {
 	
 	public  void createPoint(Point point) {
 		ObjectifyService.register(Point.class);
-		ObjectifyService.begin();
-	 
+		
 	     ofy().save().entity(point).now();
 	                    
 	 }

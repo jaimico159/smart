@@ -14,33 +14,29 @@ import structure.Vehicle;
 
 public class LocationUtilities {
 	
-
 	public LocationUtilities() {
 		
 	}
 	
-	public  void createLocation(Vehicle vehicle, Location location) {
-		Key<Vehicle> key_vehicle = Key.create(Vehicle.class, vehicle.getName()); 
-		location.setVehicle(key_vehicle);
+	public Key<Location> createLocation(Location location) {
 		ObjectifyService.register(Location.class);
-		ObjectifyService.begin();
-	 
-	     ofy().save().entity(location).now();
-	                    
-	 }
-	
-	public  void createLocation(Location location) {
-		ObjectifyService.register(Location.class);
-		ObjectifyService.begin();
-	 
-	    ofy().save().entity(location).now();
+		
+	    return ofy().save().entity(location).now();
 	                    
 	 }
 	
 	public  Iterable<Location> loadHistorical(Vehicle vehicle) {
 		ObjectifyService.register(Location.class);
 		ObjectifyService.register(Vehicle.class);
-		Iterable<Location> subordinates = ofy().load().type(Location.class).filter("id", vehicle);
+		Iterable<Location> subordinates = ofy().load().type(Location.class).filterKey(vehicle);
+
+		return subordinates;
+	}
+	
+	public  Iterable<Location> loadLast(Vehicle vehicle) {
+		ObjectifyService.register(Location.class);
+		ObjectifyService.register(Vehicle.class);
+		Iterable<Location> subordinates = ofy().load().type(Location.class).filterKey(vehicle);
 
 		return subordinates;
 	}

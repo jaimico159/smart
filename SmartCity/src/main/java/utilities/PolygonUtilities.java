@@ -20,8 +20,7 @@ public class PolygonUtilities {
 	
 	public  void createPolygon(Polygon polygon) {
 		ObjectifyService.register(Polygon.class);
-		ObjectifyService.begin();
-	 
+		
 	     ofy().save().entity(polygon).now();
 	                    
 	 }

@@ -191,13 +191,13 @@ class RealTimeCar extends Car {
     this.position = null;
     this.infoWindow = null;
   }
-  setPosition(lat, long){
+  setPosition(lat, lng){
     if(this.position){
       this.position = new Coordinate(lat,long);
     }
     else {
       this.position.lat = lat;
-      this.position.long = long;
+      this.position.lng = lng;
     }
     if(this.gMarker){
       this.gMarker.setPosition({lat: lat, lng: long});
@@ -207,8 +207,8 @@ class RealTimeCar extends Car {
     this.gMarker = new google.maps.Marker({
       icon: this.iconurl,
       map: this.map,
-      position: {lat: this.position.lat, lng: this.position.long},
-      visible: false,
+      position: {lat: this.position.lat, lng: this.position.lng},
+      visible: true,
     });
   }
   setInfoWindow(content){
@@ -242,7 +242,7 @@ class Polygon {
   build(arreglo){
   	let camino = [];
   	arreglo.forEach((element, index)=>{
-  	  camino[index] = {lat: element[1], lng: element[0]};
+  	  camino[index] = {lat: element[0], lng: element[1]};
   	});
   	this.gPolygon = new google.maps.Polygon({
   		paths: camino
@@ -310,7 +310,42 @@ class RealTimeMode {
   }
   setCars(){
     //realtime cars
+	this.cars.forEach((element)=>{
+      element.gMarker.setMap(null);
+    });
+    this.cars.length = 0;
     console.log("Llamando a la funcion /getCars para llenar el arreglo de Polygons");
+    fetch('/getRealTimeCars',{
+  		method: 'POST',
+  		headers:{
+  		  'Content-Type': 'application/json; charset=utf-8'
+  		}					
+  	}).then(response => {
+  		  if(response.ok) {
+  			  return response.json()
+  		  } else {
+  			 console.log("ERROR");
+  		    throw "Error en la llamada Ajax";
+  		  }
+  	  }).then(data => {
+  	  // Work with JSON data here
+  		  data.cars.map( (element) => {
+  		    let car = new RealTimeCar();
+  		    car.setId(element.id);
+  		    car.setMap(this.map);
+  		    car.setTile(element.description);
+  		    car.setIconUrl("https://img.icons8.com/ios/50/000000/golang-filled.png");
+	  	    console.log(element.position[1]);
+	  	    console.log(element.position[0]);
+	  	    car.setPosition(element.position[1], element.position[0]);
+	  	    car.setGoogleMarker();
+	  	    car.setInfoWindow(element.description);
+	  	    
+	  	    this.cars.push(car);
+  		  });
+  	  }).catch(err => {
+  	  console.log("ERROR");
+  	});
   }
   refreshData(){
     this.setPolygons();
@@ -318,7 +353,7 @@ class RealTimeMode {
   }
   initLoop(){
     let that = this;
-    this.loopId = setInterval(() => {that.refreshData()}, 10000);
+    this.loopId = setInterval(() => {that.setCars()}, 10000);
     this.dragendId = this.map.addListener('dragend', () => {
       that.refreshData();
     });

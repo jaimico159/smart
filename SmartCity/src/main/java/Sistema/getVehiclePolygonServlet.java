@@ -20,7 +20,7 @@ import utilities.VehicleUtilities;
 
 @WebServlet(
 		name = "getVehiclePolygon",
-		urlPatterns = {"/getRealVehiclePolygon"}
+		urlPatterns = {"/getRealTimeCars"}
 		)
 @SuppressWarnings( "serial" )
 
@@ -28,25 +28,25 @@ public class getVehiclePolygonServlet extends HttpServlet{
  
    private List<structure.Point> puntos;
 	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		//esta clase retorna el json con los vehiculos en tiempo real de un poligono
 		resp.setContentType("application/json");
 		PolygonUtilities Cpolygon = new PolygonUtilities();
 		//aca recibe el id del poligono
 		//String idPolygon=req.getParameter("id");
-		String idPolygon = "5770237022568448";
+		//String idPolygon = "5770237022568448";
 		
 		VehicleUtilities Cvehicle = new VehicleUtilities();
-		buildPolygon2 buildPolygon = new buildPolygon2();
+		//buildPolygon2 buildPolygon = new buildPolygon2();
 
 		PrintWriter writer = resp.getWriter();
 	
 
 		LocationUtilities Clocation = new LocationUtilities();
 	
-		structure.Polygon lista = Cpolygon.loadOnePolygon(idPolygon);
+		//structure.Polygon lista = Cpolygon.loadOnePolygon(idPolygon);
 	
-		puntos = lista.getPoints();
+		/*puntos = lista.getPoints();
 	
 		 System.out.println(puntos.size());
 		 for (Object i: puntos) {
@@ -55,7 +55,7 @@ public class getVehiclePolygonServlet extends HttpServlet{
 				 buildPolygon.addPoint(((structure.Point)i).getLongitude()+","+((structure.Point)i).getLatitude());
 			 }
 		 }
-		 buildPolygon.makePolygon();
+		 buildPolygon.makePolygon();*/
 	
 		 
 		List<Vehicle> vehicles = Cvehicle.loadVehicle();
@@ -75,12 +75,10 @@ public class getVehiclePolygonServlet extends HttpServlet{
 				//System.out.println(local.get(0).getLatitude());
 				//System.out.println(local.get(0).getLongitude());
 				
-				verificador = buildPolygon.coordinate_is_inside_polygon(local.get(0).getLongitude(), local.get(0).getLatitude());
-				System.out.println(local.get(0).getLatitude()+", "+ local.get(0).getLongitude());
-				System.out.println(verificador);
+				//verificador = buildPolygon.coordinate_is_inside_polygon(local.get(0).getLongitude(), local.get(0).getLatitude());
 				JSONObject json = new JSONObject();
 				JSONArray array = new JSONArray();
-				if(verificador == true) {
+				
 					json.put("id", local.get(0).getId());
 					array.put(local.get(0).getLongitude());
 					array.put(local.get(0).getLatitude());
@@ -88,7 +86,7 @@ public class getVehiclePolygonServlet extends HttpServlet{
 					
 					json.put("position", array);
 					arrayFinal.put(json);
-				}
+				
 			
 				
 			}

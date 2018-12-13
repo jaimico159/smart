@@ -9,8 +9,7 @@ import com.googlecode.objectify.annotation.Id;
 
 @Entity
 public class Point {
-	@Id 
-	Long id;
+	@Id Long id;
 	double latitude;
 	double longitude;
 	int order;

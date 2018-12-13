@@ -65,29 +65,27 @@ public class getVehicleHistoricalServlet extends HttpServlet{
 		JSONArray arrayEntrega = new JSONArray();
 		List<Vehicle> vehicles = Cvehicles.loadVehicle();
 		for(Vehicle i: vehicles) {
-			if(i instanceof Vehicle) {
-				JSONArray arrayFinal = new JSONArray();
-				JSONObject provisional = new JSONObject();
-				Iterable<Location>vehicleHis = Clocation.loadHistorical((Vehicle)i);
-				provisional.put("id",((Vehicle)i).getName() );
-				for(Object j: vehicleHis) {
-					if(j instanceof Location) {	
-						Date date = ((Location)j).getDatetime2();
-						JSONArray arrayCoordenada = new JSONArray();
-						if(date.before(fin)) {
-							if(inicio.before(date)) {				       
-						        arrayCoordenada.put(((Location)j).getLongitude());
-						        arrayCoordenada.put(((Location)j).getLatitude());
-						        arrayFinal.put(arrayCoordenada);
-							}
-				        }
-					}
+			JSONArray arrayFinal = new JSONArray();
+			JSONObject provisional = new JSONObject();
+			Iterable<Location>vehicleHis = Clocation.loadHistorical((Vehicle)i);
+			provisional.put("id",((Vehicle)i).getName() );
+			for(Object j: vehicleHis) {
+				if(j instanceof Location) {	
+					Date date = ((Location)j).getDatetime2();
+					JSONArray arrayCoordenada = new JSONArray();
+					if(date.before(fin)) {
+						if(inicio.before(date)) {				       
+					        arrayCoordenada.put(((Location)j).getLongitude());
+					        arrayCoordenada.put(((Location)j).getLatitude());
+					        arrayFinal.put(arrayCoordenada);
+						}
+			        }
 				}
-				//System.out.println(local.get(0).getLatitude());
-				//System.out.println(local.get(0).getLongitude());  
+			}
+			//System.out.println(local.get(0).getLatitude());
+			//System.out.println(local.get(0).getLongitude());  
 			provisional.put("history",arrayFinal);
 			arrayEntrega.put(provisional);
-			}
 		}
 		entrega.put("cars", arrayEntrega);
 		//aqui va la escritura en JSON
