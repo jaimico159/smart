@@ -1,4 +1,4 @@
-package smart;
+package System;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,10 +70,10 @@ public class AddVehiclePosition extends HttpServlet {
 		
 		LocationUtilities persister = factory.makeLocationUtilities();
 		VehicleUtilities retriever = factory.makeVehicleUtilities();
-		Vehicle vehicle = retriever.getVehicle(clave);
-		Key<Location> last_location = persister.createLocation(location);
+		Vehicle vehicle = retriever.get(clave);
+		Key<Location> last_location = persister.save(location);
 		vehicle.setLastLocation(last_location);
-		retriever.updateVehicle(vehicle);
+		retriever.update(vehicle);
 		
 	}
 

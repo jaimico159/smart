@@ -36,7 +36,7 @@ public class ToAddCarPositionForm extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		VehicleUtilities retriever = new VehicleUtilities();
-		List<Vehicle> lista = retriever.loadVehicle();
+		List<Vehicle> lista = retriever.getList();
 		request.setAttribute("cars", lista);
 		request.getRequestDispatcher("WEB-INF/jsp/AddCarPosition.jsp").forward(request, response);
 	}

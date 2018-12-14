@@ -1,4 +1,4 @@
-package Sistema;
+package API;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class getVehiclesServlet extends HttpServlet{
 		resp.setContentType("application/json");
 		
 		VehicleUtilities retriever = new VehicleUtilities();
-		List<Vehicle> vehicles = retriever.loadVehicle();
+		List<Vehicle> vehicles = retriever.getList();
 		PrintWriter writer = resp.getWriter();
 		JSONObject principal = new JSONObject();
 		

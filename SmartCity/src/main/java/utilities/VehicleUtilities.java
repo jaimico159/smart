@@ -8,34 +8,67 @@ import java.util.List;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
+
+import structure.Location;
 import structure.Vehicle;
 
-public class VehicleUtilities {
+public class VehicleUtilities implements BasicUtilities<Vehicle>{
 	
 	public VehicleUtilities() {	
 		ObjectifyService.begin();
 	}
 	
-	public  Key<Vehicle> createVehicle(Vehicle vehicle) {
+	@Override
+	public Key<Vehicle> save(Vehicle vehicle) {
 		ObjectifyService.register(Vehicle.class);
 		
 		return ofy().save().entity(vehicle).now();                
 	}
 	
-	public  List<Vehicle> loadVehicle() {
-		ObjectifyService.register(Vehicle.class);
-		ObjectifyService.begin();
-		List<Vehicle> vehicle = ofy().load().type(Vehicle.class).list();
-
-		return vehicle;
-	}
-
-	public Vehicle getVehicle(Key<Vehicle> clave) {
+	@Override
+	public Vehicle get(Key<Vehicle> clave) {
 		return ofy().load().key(clave).now();
 	}
 	
-	public Key<Vehicle> updateVehicle(Vehicle vehicle) {
+	@Override
+	public Key<Vehicle> update(Vehicle vehicle) {
 		return ofy().save().entity(vehicle).now();
 	}
+	
+	@Override
+	public List<Vehicle> getList() {
+		ObjectifyService.register(Vehicle.class);
+		ObjectifyService.begin();
+
+		return ofy().load().type(Vehicle.class).list();
+	}
+
+	@Override
+	public void delete(Key<Vehicle> key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public long getNumberOfElements() {
+		// TODO Auto-generated method stub
+		return ofy().load().type(Location.class).count();
+	}
+
+	@Override
+	public Vehicle getFirst() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vehicle getLast() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	
+	
 
 }

@@ -1,34 +1,37 @@
-package Sistema;
+package API;
 
 import java.io.IOException;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.appengine.repackaged.com.google.common.io.CharStreams;
+import com.google.gson.JsonSerializer;
 
-import Builder.InterestingZoneJson;
+import Builder.PolygonJson;
 import Modules.Polygon.buildPolygon2;
-import structure.PointOfInterest;
-
-import utilities.PointOfInterestUtilities;
+import structure.Point;
+import structure.Polygon;
+import utilities.PolygonUtilities;
 
 @WebServlet(
-		name = "getInterestingZone", 
-        urlPatterns = { "/getPointsOfInterest" })
-@SuppressWarnings("serial")
-public class getInterestingZone extends HttpServlet {
+		name = "Polygons",
+		urlPatterns = {"/getPolygons"}
+		)
+@SuppressWarnings( "serial" )
+public class getPolygonServlet extends HttpServlet{
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String test = CharStreams.toString(req.getReader());
 		test = test.replaceAll("\"", "");
@@ -43,7 +46,6 @@ public class getInterestingZone extends HttpServlet {
 			requestmap.put(element[0], element[1]);
 		}
 		System.out.println(requestmap);
-		System.out.println("Rescatando zona");
 		
 		String longSupDerecha=requestmap.get("longSupDerecha");
 		String latSupDerecha= requestmap.get("latSupDerecha");
@@ -53,43 +55,26 @@ public class getInterestingZone extends HttpServlet {
 		String latInfDerecha= requestmap.get("latInfDerecha");
 		String longInfIzquierda= requestmap.get("longInfIzquierda");
 		String latInfIzquierda= requestmap.get("latInfIzquierda");
-		resp.setContentType("application/json");
-		//Esta clase retorna las zonas de interes de acuerdo a la pantalla
 		
-		/*
-		String longSupDerecha=req.getParameter("longSupDerecha");
-		String latSupDerecha= req.getParameter("latSupDerecha");
-		String longSupIzquieda= req.getParameter("longSupIzquieda");
-		String latSupIzquieda= req.getParameter("latSupIzquieda");
-		String longInfDerecha= req.getParameter("longInfDerecha");
-		String latInfDerecha= req.getParameter("latInfDerecha");
-		String longInfIzquierda= req.getParameter("longInfIzquierda");
-		String latInfIzquierda= req.getParameter("latInfIzquierda");
-		*/
-		/*String longSupDerecha="-71.54312";
-		String latSupDerecha= "16.231221";
-		String longSupIzquieda= "-74.23212";
-		String latSupIzquieda= "16.23122";
-		String longInfDerecha= "-71.542312";
-		String latInfDerecha= "-17.1231212";
-		String longInfIzquierda= "-74.12312";
-		String latInfIzquierda= "-16.432223";*/
-		
+		buildPolygon2 polygon = new buildPolygon2();
+		PolygonUtilities Cpolygon = new PolygonUtilities();
 		PrintWriter writer = resp.getWriter();
+		List<Polygon> polygons = Cpolygon.loadPolygon();
 		
+		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
+		polygon.addPoint(longInfDerecha+","+latInfDerecha);
+		polygon.addPoint(longSupDerecha+","+latSupDerecha);
+		polygon.addPoint(longSupIzquieda+","+latSupIzquieda);
 		
-	
-	
-		PointOfInterestUtilities retriever = new PointOfInterestUtilities();
-		List<PointOfInterest> zones = retriever.loadPointOfInterest();
-				
+		polygon.makePolygon();
 		
-		InterestingZoneJson json = new InterestingZoneJson(zones);
-		json.build();
+		PolygonJson wrapper = new PolygonJson(polygon, polygons);
+		wrapper.build();
+		
 		resp.setCharacterEncoding("UTF-8");
-		writer.print(json.getJson());
-		writer.flush();
-
+	    writer.print(wrapper.getJson());
+	    System.out.println("Hizo flush");
+	    writer.flush();
 	}
 }
-//revisar
+

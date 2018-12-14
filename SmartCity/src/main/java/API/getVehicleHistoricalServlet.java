@@ -1,4 +1,4 @@
-package Sistema;
+package API;
 
 import java.io.IOException;
 
@@ -55,7 +55,7 @@ public class getVehicleHistoricalServlet extends HttpServlet{
 
 		PrintWriter writer = resp.getWriter(); 
         
-        List<Vehicle> vehicles = vehiclesRetriever.loadVehicle();
+        List<Vehicle> vehicles = vehiclesRetriever.getList();
 		
         VehicleHistorical wrapper = new VehicleHistorical(vehicles, inicio, fin);
         wrapper.build();

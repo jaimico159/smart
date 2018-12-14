@@ -37,7 +37,7 @@ public class RealVehicleJson extends AbstractJsonBuilder {
         JSONArray arrayFinal = new JSONArray();
 		
 		for(Vehicle vehicle: vehicles) {
-			Location location = locationRetriever.getLocation(vehicle.getLastLocation());
+			Location location = locationRetriever.get(vehicle.getLastLocation());
 			JSONObject json = new JSONObject();
 			JSONArray array = new JSONArray();
 			

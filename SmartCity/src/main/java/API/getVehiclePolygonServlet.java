@@ -1,4 +1,4 @@
-package Sistema;
+package API;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		resp.setContentType("application/json");
 		VehicleUtilities vehicleRetriever = new VehicleUtilities();
 		PrintWriter writer = resp.getWriter();
-		List<Vehicle> vehicles = vehicleRetriever.loadVehicle();
+		List<Vehicle> vehicles = vehicleRetriever.getList();
         
         RealVehicleJson wrapper = new RealVehicleJson(vehicles);
         wrapper.build();

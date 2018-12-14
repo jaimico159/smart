@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import Modules.Polygon.buildPolygon2;
 import structure.Point;
 import structure.Polygon;
-import structure.Vehicle;
 
 public class PolygonJson extends AbstractJsonBuilder {
 	

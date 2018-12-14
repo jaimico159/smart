@@ -15,7 +15,7 @@
         <div id="interval">
           <label for="fromdate">Desde:</label><br>
           <input id="fromdate" type="datetime-local" name="fromdate"><br>
-          <label for="todate">Hasta:</label>
+          <label for="todate">Hasta:</label><br>
           <input id="todate" type="datetime-local" name="todate"><br>
         </div>
       </div>
@@ -37,7 +37,7 @@
         global = google;
         mapa = new Mapster();
         mapa.setElement('map');
-        mapa.setOptions(initOptions(-16.398764, -71.536883, 12, 'hybrid', 15, 6));
+        mapa.setOptions(initOptions(-16.398764, -71.536883, 12, 'hybrid', 20, 12));
         mapa.setMap();
         mapa.RenderMap();
         
