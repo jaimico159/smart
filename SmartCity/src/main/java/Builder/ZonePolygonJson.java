@@ -22,7 +22,7 @@ public class ZonePolygonJson extends AbstractJsonBuilder {
     	this.zones = zones;
     }
     
-	public void build() {
+	public void build() throws Exception{
 		JSONObject entrega = new JSONObject();
         JSONArray arrayFinal = new JSONArray();
 		for (PointOfInterest aux : zones) {

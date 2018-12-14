@@ -69,7 +69,11 @@ public class getPolygonServlet extends HttpServlet{
 		polygon.makePolygon();
 		
 		PolygonJson wrapper = new PolygonJson(polygon, polygons);
-		wrapper.build();
+		try {
+			wrapper.build();
+		} catch (Exception e) {
+			System.out.println("la lista de poligonos es nula!");
+		}
 		
 		resp.setCharacterEncoding("UTF-8");
 	    writer.print(wrapper.getJson());

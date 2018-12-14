@@ -85,7 +85,11 @@ public class getInterestingZone extends HttpServlet {
 				
 		
 		InterestingZoneJson json = new InterestingZoneJson(zones);
-		json.build();
+		try {
+			json.build();
+		} catch (Exception e) {
+			System.out.println("la lista de zoonas es nula!");
+		}
 		resp.setCharacterEncoding("UTF-8");
 		writer.print(json.getJson());
 		writer.flush();

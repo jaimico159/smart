@@ -32,7 +32,7 @@ public class VehicleHistorical extends AbstractJsonBuilder {
 	    }
 
 	@Override
-	public void build() {
+	public void build() throws Exception{
 		
 		LocationUtilities locationRetriever = new LocationUtilities();
 		VehicleUtilities vehiclesRetriever = new VehicleUtilities();

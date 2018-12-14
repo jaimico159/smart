@@ -34,7 +34,11 @@ public class getVehiclePolygonServlet extends HttpServlet{
 		List<Vehicle> vehicles = vehicleRetriever.getList();
         
         RealVehicleJson wrapper = new RealVehicleJson(vehicles);
-        wrapper.build();
+        try {
+			wrapper.build();
+		} catch (Exception e) {
+			System.out.println("la lista de vehiculos es nula!");
+		}
         
         resp.setCharacterEncoding("UTF-8");
 	    writer.print(wrapper.getJson());

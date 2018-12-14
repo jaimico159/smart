@@ -19,7 +19,8 @@ public class InterestingZoneJson extends AbstractJsonBuilder {
     }
 
 	@Override
-	public void build() {
+	public void build() throws Exception {
+		
 		JSONArray arrayFinal = new JSONArray();
 		System.out.println("hola");
 		for (PointOfInterest aux : zones) {

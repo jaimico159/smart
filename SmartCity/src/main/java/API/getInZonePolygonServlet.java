@@ -52,7 +52,11 @@ public class getInZonePolygonServlet extends HttpServlet {
 
 		List<PointOfInterest> zones = interestRetriver.loadPointOfInterest();
         ZonePolygonJson zoneJson = new ZonePolygonJson(buildPolygon, zones );
-        zoneJson.build();
+        try {
+			zoneJson.build();
+		} catch (Exception e) {
+			System.out.println("la lista de zonas es nula!");
+		}
 		resp.setCharacterEncoding("UTF-8");
 		writer.print(zoneJson.getJson());
 		writer.flush();

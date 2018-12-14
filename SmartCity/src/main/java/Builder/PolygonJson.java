@@ -20,7 +20,7 @@ public class PolygonJson extends AbstractJsonBuilder {
     	this.polygons = polygons;
     }
     
-	public void build() {
+	public void build() throws Exception{
 		JSONArray array = new JSONArray();
 		 
 		for (Polygon aux: polygons) {

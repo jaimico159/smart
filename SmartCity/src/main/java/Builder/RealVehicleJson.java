@@ -31,7 +31,7 @@ public class RealVehicleJson extends AbstractJsonBuilder {
     }
 
 	@Override
-	public void build() {
+	public void build() throws Exception{
 		
 		LocationUtilities locationRetriever = new LocationUtilities();
         JSONArray arrayFinal = new JSONArray();
