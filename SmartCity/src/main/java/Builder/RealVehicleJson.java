@@ -9,34 +9,29 @@ import org.json.JSONObject;
 
 import Modules.Polygon.buildPolygon2;
 import structure.Location;
+import structure.PointOfInterest;
+import structure.Polygon;
 import structure.Vehicle;
 import utilities.LocationUtilities;
 
-public class RealVehicleJson extends AbstractJsonBuilder {
-	public List<Vehicle> vehicles;
+public class RealVehicleJson {
+	public JsonBuilder<Vehicle> RealtJson;
 
-	public LocationUtilities Clocation;
-	public RealVehicleJson(List<Vehicle> vehicles, buildPolygon2 polygon) {
-		this.vehicles = new ArrayList<Vehicle>();
-	    	this.vehicles = vehicles;
-	    	Clocation = new LocationUtilities();
-	    	this.polygon = polygon;
+	public RealVehicleJson(JsonBuilder<Vehicle> json) {
+		this.RealtJson = json;
 	    	
 	    }
-	public RealVehicleJson(List<Vehicle> vehicles) {
-    	
-    	this.vehicles = new ArrayList<Vehicle>();
-    	this.vehicles = vehicles;
-    	Clocation = new LocationUtilities();
-    }
+	 public Json<Vehicle> getJson() {
+			return this.RealtJson.getJson();
+		}
 
-	@Override
-	public void build() throws Exception{
-		
+	public void build(List<Vehicle> lista) throws Exception{
+		RealtJson.buildList(lista);
+		RealtJson.buildObjectJson();
 		LocationUtilities locationRetriever = new LocationUtilities();
         JSONArray arrayFinal = new JSONArray();
 		
-		for(Vehicle vehicle: vehicles) {
+		for(Vehicle vehicle: RealtJson.getJson().getLista()) {
 			Location location = locationRetriever.get(vehicle.getLastLocation());
 			JSONObject json = new JSONObject();
 			JSONArray array = new JSONArray();
@@ -51,7 +46,7 @@ public class RealVehicleJson extends AbstractJsonBuilder {
 				
 			
 		}
-		entrega.put("cars", arrayFinal);
+		RealtJson.getJson().getJson().put("cars", arrayFinal);
 		
 		
 	}

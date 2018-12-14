@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import Builder.InterestingZoneJson;
+import Builder.Json;
+import Builder.JsonBuilder;
 import Builder.ZonePolygonJson;
 import Modules.Polygon.buildPolygon2;
 import structure.PointOfInterest;
@@ -49,16 +52,20 @@ public class getInZonePolygonServlet extends HttpServlet {
 			}
 		}
 		buildPolygon.makePolygon();
-
-		List<PointOfInterest> zones = interestRetriver.loadPointOfInterest();
-        ZonePolygonJson zoneJson = new ZonePolygonJson(buildPolygon, zones );
+		Json<PointOfInterest> json = new Json<PointOfInterest>();
+		
         try {
-			zoneJson.build();
+        	List<PointOfInterest> zones = interestRetriver.loadPointOfInterest();			
+			JsonBuilder<PointOfInterest> InterestingZone = new JsonBuilder<PointOfInterest>();
+		
+			ZonePolygonJson IntJson = new ZonePolygonJson(InterestingZone);
+			IntJson.build(zones, buildPolygon);
+			json =  IntJson.getJson();
 		} catch (Exception e) {
 			System.out.println("la lista de zonas es nula!");
 		}
 		resp.setCharacterEncoding("UTF-8");
-		writer.print(zoneJson.getJson());
+		writer.print(json.getJson());
 		writer.flush();
 
 	}

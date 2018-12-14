@@ -2,6 +2,7 @@ package API;
 
 import java.io.IOException;
 
+import Builder.*;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,8 @@ import org.json.JSONObject;
 
 import com.googlecode.objectify.Key;
 
+import Builder.JsonBuilder;
+import Builder.RealVehicleJson;
 import Builder.VehicleHistorical;
 import Exception.registryError;
 import structure.Location;
@@ -51,18 +54,22 @@ public class getVehicleHistoricalServlet extends HttpServlet {
 		}
 
 		PrintWriter writer = resp.getWriter();
-
+        Json<Vehicle> json = new Json<Vehicle>();
 		try {
 			if (fin.before(inicio)) {
 
 				throw new registryError("La fecha fin no puede ser antes de la de inicio!");
 			}
 
+			JsonBuilder<Vehicle> VehicleHist = new JsonBuilder<Vehicle>();
 			List<Vehicle> vehicles = vehiclesRetriever.getList();
-			VehicleHistorical wrapper = new VehicleHistorical(vehicles, inicio, fin);
-			wrapper.build();
+			
+			VehicleHistorical wrapper = new VehicleHistorical(VehicleHist);
+			wrapper.build(vehicles, inicio,fin);
+		
+			json =  wrapper.getJson();
 			resp.setCharacterEncoding("UTF-8");
-			writer.print(wrapper.getJson());
+			writer.print(wrapper.getJson().getJson());
 
 		} catch (registryError e) {
 			System.out.println(e.getMessage());

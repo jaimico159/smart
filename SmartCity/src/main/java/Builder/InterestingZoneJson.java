@@ -10,20 +10,22 @@ import Modules.Polygon.buildPolygon2;
 import structure.PointOfInterest;
 import structure.Polygon;
 
-public class InterestingZoneJson extends AbstractJsonBuilder {
-	public List<PointOfInterest> zones;
-
-    public InterestingZoneJson(List<PointOfInterest> zones) {
-    	this.zones = new ArrayList<PointOfInterest>();
-    	this.zones = zones;
-    }
-
-	@Override
-	public void build() throws Exception {
-		
+public class InterestingZoneJson{
+	public JsonBuilder<PointOfInterest> IntJson;
+	
+	public InterestingZoneJson(JsonBuilder<PointOfInterest> json) {
+		this.IntJson = json;
+	}
+	public Json<PointOfInterest> getJson() {
+		return this.IntJson.getJson();
+	}
+	
+	public void build(List<PointOfInterest> lista) throws Exception {
+		IntJson.buildList(lista);
+		IntJson.buildObjectJson();
 		JSONArray arrayFinal = new JSONArray();
 		System.out.println("hola");
-		for (PointOfInterest aux : zones) {
+		for (PointOfInterest aux : IntJson.getJson().getLista()) {
 			boolean verificador = true;
 				
 			JSONObject json = new JSONObject();
@@ -40,7 +42,7 @@ public class InterestingZoneJson extends AbstractJsonBuilder {
 			}		
 		}
 
-		entrega.put("points", arrayFinal);
+		IntJson.getJson().getJson().put("points", arrayFinal);
 
 		
 	}

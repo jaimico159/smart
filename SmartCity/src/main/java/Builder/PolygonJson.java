@@ -1,6 +1,7 @@
 package Builder;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.json.JSONArray;
@@ -8,22 +9,28 @@ import org.json.JSONObject;
 
 import Modules.Polygon.buildPolygon2;
 import structure.Point;
+import structure.PointOfInterest;
 import structure.Polygon;
 
-public class PolygonJson extends AbstractJsonBuilder {
+public class PolygonJson {
 	
-	public List<Polygon> polygons;
+	public JsonBuilder<Polygon> polJson;
 
-    public PolygonJson(buildPolygon2 polygon, List<Polygon> polygons) {
-    	this.polygons = new ArrayList<Polygon>();
-    	this.polygon = polygon;
-    	this.polygons = polygons;
+    public PolygonJson(JsonBuilder<Polygon> polJson) {
+    	this.polJson = polJson;
     }
-    
-	public void build() throws Exception{
+    public Json<Polygon> getJson() {
+		return this.polJson.getJson();
+	}
+	public void build(List<Polygon> lista, buildPolygon2 polygon) throws Exception{
+		polJson.buildObjectJson();
+		polJson.buildList(lista);
+		
+		
+		polJson.getJson().setPolygon(polygon);
 		JSONArray array = new JSONArray();
 		 
-		for (Polygon aux: polygons) {
+		for (Polygon aux: polJson.getJson().getLista()) {
 			 JSONObject recolector = new JSONObject();		 	
 			 boolean verificador =false;
 			 int contador = 0;
@@ -31,7 +38,7 @@ public class PolygonJson extends AbstractJsonBuilder {
 			 List<Point> points = aux.getPoints();
 			 for(Point j : points ) {
 			 	 aux2.add(j);
-				 verificador = polygon.coordinate_is_inside_polygon(j.getLongitude(), j.getLatitude());
+				 verificador = polJson.getJson().getPolygon().coordinate_is_inside_polygon(j.getLongitude(), j.getLatitude());
                  if(verificador==true) {
                 	 contador++;
                  }
@@ -57,7 +64,7 @@ public class PolygonJson extends AbstractJsonBuilder {
 			 recolector.put("path", arfinal);
 			 array.put(recolector);
 		}
-		entrega.put("polygons", array);		
+		polJson.getJson().getJson().put("polygons", array);		
 	}
 	
 

@@ -16,29 +16,27 @@ import structure.Vehicle;
 import utilities.LocationUtilities;
 import utilities.VehicleUtilities;
 
-public class VehicleHistorical extends AbstractJsonBuilder {
-	public Iterable<Vehicle> vehicles;
-	public Date inicio;
-	public Date fin;
+public class VehicleHistorical{
+	public JsonBuilder<Vehicle> HistJson;
 	
-	public VehicleHistorical(List<Vehicle> vehicles, Date inicio, Date fin) {
-		this.vehicles = new ArrayList<Vehicle>();
-		//this.inicio = new Date();
-		//this.fin = new Date();
-    	this.vehicles = vehicles;
-    	this.inicio = inicio;
-    	this.fin = fin;
-	
+	public VehicleHistorical(JsonBuilder<Vehicle> json) {
+		this.HistJson = json;
+	    	
 	    }
+	 public Json<Vehicle> getJson() {
+			return this.HistJson.getJson();
+		}
 
-	@Override
-	public void build() throws Exception{
+
+	public void build(List<Vehicle> lista, Date inicio, Date fin) throws Exception{
+		HistJson.buildList(lista);
+		HistJson.buildObjectJson();
 		
 		LocationUtilities locationRetriever = new LocationUtilities();
-		VehicleUtilities vehiclesRetriever = new VehicleUtilities();
+		
 		
 		JSONArray arrayEntrega = new JSONArray();
-		for(Vehicle i: vehicles) {
+		for(Vehicle i: HistJson.getJson().getLista()) {
 			JSONArray arrayFinal = new JSONArray();
 			JSONObject provisional = new JSONObject();
 			Key<Vehicle> aux = Key.create(Vehicle.class, i.getId());
@@ -61,7 +59,7 @@ public class VehicleHistorical extends AbstractJsonBuilder {
 			provisional.put("history",arrayFinal);
 			arrayEntrega.put(provisional);
 		}
-		entrega.put("cars", arrayEntrega);	
+		HistJson.getJson().getJson().put("cars", arrayEntrega);	
 		
 		
 	}

@@ -2,6 +2,7 @@ package API;
 
 import java.io.IOException;
 
+import Builder.*;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,10 +21,14 @@ import org.json.JSONObject;
 import com.google.appengine.repackaged.com.google.common.io.CharStreams;
 import com.google.gson.JsonSerializer;
 
+import Builder.InterestingZoneJson;
+import Builder.JsonBuilder;
 import Builder.PolygonJson;
 import Modules.Polygon.buildPolygon2;
 import structure.Point;
+import structure.PointOfInterest;
 import structure.Polygon;
+import utilities.PointOfInterestUtilities;
 import utilities.PolygonUtilities;
 
 @WebServlet(
@@ -67,16 +72,23 @@ public class getPolygonServlet extends HttpServlet{
 		polygon.addPoint(longSupIzquieda+","+latSupIzquieda);
 		
 		polygon.makePolygon();
-		
-		PolygonJson wrapper = new PolygonJson(polygon, polygons);
+		Json<Polygon> json = new Json<Polygon>();
+	
 		try {
-			wrapper.build();
+			PointOfInterestUtilities retriever = new PointOfInterestUtilities();
+					
+			JsonBuilder<Polygon> InterestingZone = new JsonBuilder<Polygon>();
+		
+			PolygonJson wrapper = new PolygonJson(InterestingZone);
+			wrapper.build(polygons, polygon);
+			json =  wrapper.getJson();
+			
 		} catch (Exception e) {
 			System.out.println("la lista de poligonos es nula!");
 		}
 		
 		resp.setCharacterEncoding("UTF-8");
-	    writer.print(wrapper.getJson());
+	    writer.print(json.getJson());
 	    System.out.println("Hizo flush");
 	    writer.flush();
 	}

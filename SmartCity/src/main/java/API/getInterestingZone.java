@@ -1,6 +1,7 @@
 package API;
 
 import java.io.IOException;
+import Builder.*;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -18,7 +19,6 @@ import org.json.JSONObject;
 
 import com.google.appengine.repackaged.com.google.common.io.CharStreams;
 
-import Builder.InterestingZoneJson;
 import Modules.Polygon.buildPolygon2;
 import structure.PointOfInterest;
 
@@ -76,20 +76,22 @@ public class getInterestingZone extends HttpServlet {
 		String latInfIzquierda= "-16.432223";*/
 		
 		PrintWriter writer = resp.getWriter();
-		
-		
-	
-	
-		PointOfInterestUtilities retriever = new PointOfInterestUtilities();
-		List<PointOfInterest> zones = retriever.loadPointOfInterest();
-				
-		
-		InterestingZoneJson json = new InterestingZoneJson(zones);
+		Json<PointOfInterest> json = new Json<PointOfInterest>();
+
 		try {
-			json.build();
+			PointOfInterestUtilities retriever = new PointOfInterestUtilities();
+			List<PointOfInterest> zones = retriever.loadPointOfInterest();
+					
+			JsonBuilder<PointOfInterest> InterestingZone = new JsonBuilder<PointOfInterest>();
+		
+			InterestingZoneJson IntJson = new InterestingZoneJson(InterestingZone);
+			IntJson.build(zones);
+			json =  IntJson.getJson();
+			
 		} catch (Exception e) {
 			System.out.println("la lista de zoonas es nula!");
 		}
+		System.out.println(json.getJson().toString());
 		resp.setCharacterEncoding("UTF-8");
 		writer.print(json.getJson());
 		writer.flush();

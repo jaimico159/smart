@@ -12,20 +12,22 @@ import structure.PointOfInterest;
 import structure.Polygon;
 import structure.Vehicle;
 
-public class ZonePolygonJson extends AbstractJsonBuilder {
+public class ZonePolygonJson{
 	
-	public List<PointOfInterest> zones;
-
-    public ZonePolygonJson(buildPolygon2 polygon, List<PointOfInterest> zones) {
-    	this.zones = new ArrayList<PointOfInterest>();
-    	this.polygon = polygon;
-    	this.zones = zones;
-    }
+public JsonBuilder<PointOfInterest> IntJson;
+	
+	public ZonePolygonJson(JsonBuilder<PointOfInterest> json) {
+		this.IntJson = json;
+	}
+	public Json<PointOfInterest> getJson() {
+		return this.IntJson.getJson();
+	}
     
-	public void build() throws Exception{
-		JSONObject entrega = new JSONObject();
+	public void build(List<PointOfInterest> lista,  buildPolygon2 polygon) throws Exception{
+		IntJson.buildList(lista);
+		
         JSONArray arrayFinal = new JSONArray();
-		for (PointOfInterest aux : zones) {
+		for (PointOfInterest aux : IntJson.getJson().getLista()) {
 			boolean verificador = false;			
 			verificador = polygon.coordinate_is_inside_polygon(aux.getLongitude(), aux.getLatitude());
 			JSONObject json = new JSONObject();
@@ -43,7 +45,7 @@ public class ZonePolygonJson extends AbstractJsonBuilder {
 
 		
 		}
-		entrega.put("points", arrayFinal);
+		IntJson.getJson().getJson().put("points", arrayFinal);
 		
 	}
 	
