@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Factories.objectFactory;
 import structure.PointOfInterest;
-import utilities.PointOfInterestUtilities;
+import utilities.PointOfInterestDAO;
 
 /**
  * Servlet implementation class AddPointOfInterest
@@ -46,13 +46,13 @@ public class AddPointOfInterest extends HttpServlet {
 		String point[] = request.getParameter("position").split(",");
 		double latitude = Double.parseDouble(point[0]);
 		double longitude = Double.parseDouble(point[1]);
-		PointOfInterestUtilities persister = factory.makePointOfInterestUtilities();
+		PointOfInterestDAO persister = factory.makePointOfInterestUtilities();
 		PointOfInterest zone = factory.makePointOfInterest();
 		zone.setDescription(description);
 		zone.setLatitude(latitude);
 		zone.setLongitude(longitude);
 		zone.setName(name);
-		persister.createPointOfInterest(zone);
+		persister.save(zone);
 	}
 
 }

@@ -22,7 +22,7 @@ import Builder.InterestingZoneJson;
 import Modules.Polygon.buildPolygon2;
 import structure.PointOfInterest;
 
-import utilities.PointOfInterestUtilities;
+import utilities.PointOfInterestDAO;
 
 @WebServlet(
 		name = "getInterestingZone", 
@@ -34,7 +34,6 @@ public class getInterestingZone extends HttpServlet {
 		test = test.replaceAll("\"", "");
 		test = test.substring(1, test.length()-1);
 		
-		//System.out.println(mapa);
 		Map<String,String> requestmap = new HashMap<String,String>();
 		List<String> lista = Arrays.asList(test.split(","));
 		String[] element;
@@ -54,37 +53,13 @@ public class getInterestingZone extends HttpServlet {
 		String longInfIzquierda= requestmap.get("longInfIzquierda");
 		String latInfIzquierda= requestmap.get("latInfIzquierda");
 		resp.setContentType("application/json");
-		//Esta clase retorna las zonas de interes de acuerdo a la pantalla
-		
-		/*
-		String longSupDerecha=req.getParameter("longSupDerecha");
-		String latSupDerecha= req.getParameter("latSupDerecha");
-		String longSupIzquieda= req.getParameter("longSupIzquieda");
-		String latSupIzquieda= req.getParameter("latSupIzquieda");
-		String longInfDerecha= req.getParameter("longInfDerecha");
-		String latInfDerecha= req.getParameter("latInfDerecha");
-		String longInfIzquierda= req.getParameter("longInfIzquierda");
-		String latInfIzquierda= req.getParameter("latInfIzquierda");
-		*/
-		/*String longSupDerecha="-71.54312";
-		String latSupDerecha= "16.231221";
-		String longSupIzquieda= "-74.23212";
-		String latSupIzquieda= "16.23122";
-		String longInfDerecha= "-71.542312";
-		String latInfDerecha= "-17.1231212";
-		String longInfIzquierda= "-74.12312";
-		String latInfIzquierda= "-16.432223";*/
-		
+			
 		PrintWriter writer = resp.getWriter();
-		
-		
 	
-	
-		PointOfInterestUtilities retriever = new PointOfInterestUtilities();
-		List<PointOfInterest> zones = retriever.loadPointOfInterest();
-				
+		PointOfInterestDAO retriever = new PointOfInterestDAO();
+					
+		InterestingZoneJson json = new InterestingZoneJson(retriever.getList());
 		
-		InterestingZoneJson json = new InterestingZoneJson(zones);
 		json.build();
 		resp.setCharacterEncoding("UTF-8");
 		writer.print(json.getJson());
@@ -92,4 +67,3 @@ public class getInterestingZone extends HttpServlet {
 
 	}
 }
-//revisar

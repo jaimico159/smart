@@ -13,8 +13,8 @@ import Factories.objectFactory;
 import structure.Point;
 import structure.Polygon;
 import structure.Vehicle;
-import utilities.PolygonUtilities;
-import utilities.VehicleUtilities;
+import utilities.PolygonDAO;
+import utilities.VehicleDAO;
 
 /**
  * Servlet implementation class AddVehicle
@@ -52,7 +52,7 @@ public class AddVehicle extends HttpServlet {
 		car.setName(name);
 		System.out.println(car.getName());
 		//VehicleUtilities persister = factory.makeVehicleUtilities();
-		VehicleUtilities persister = new VehicleUtilities();
+		VehicleDAO persister = new VehicleDAO();
 		persister.save(car);
 	}
 

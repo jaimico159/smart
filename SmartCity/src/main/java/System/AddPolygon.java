@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import Factories.objectFactory;
 import structure.Point;
 import structure.Polygon;
-import utilities.PolygonUtilities;
+import utilities.PolygonDAO;
 
 /**
  * Servlet implementation class AddPolygon
@@ -61,8 +61,8 @@ public class AddPolygon extends HttpServlet {
 		pol.setName(name);
 		pol.setPoints(puntos);
 
-		PolygonUtilities persister = new PolygonUtilities();
-		persister.createPolygon(pol);
+		PolygonDAO persister = new PolygonDAO();
+		persister.save(pol);
 		
 	}
 

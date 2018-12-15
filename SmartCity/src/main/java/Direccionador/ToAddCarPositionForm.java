@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import structure.Vehicle;
-import utilities.VehicleUtilities;
+import utilities.VehicleDAO;
 
 /**
  * Servlet implementation class ToAddCarPositionForm
@@ -35,7 +35,7 @@ public class ToAddCarPositionForm extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		VehicleUtilities retriever = new VehicleUtilities();
+		VehicleDAO retriever = new VehicleDAO();
 		List<Vehicle> lista = retriever.getList();
 		request.setAttribute("cars", lista);
 		request.getRequestDispatcher("WEB-INF/jsp/AddCarPosition.jsp").forward(request, response);

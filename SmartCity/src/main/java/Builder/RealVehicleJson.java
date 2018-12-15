@@ -10,16 +10,16 @@ import org.json.JSONObject;
 import Modules.Polygon.buildPolygon2;
 import structure.Location;
 import structure.Vehicle;
-import utilities.LocationUtilities;
+import utilities.LocationDAO;
 
 public class RealVehicleJson extends AbstractJsonBuilder {
 	public List<Vehicle> vehicles;
 
-	public LocationUtilities Clocation;
+	public LocationDAO Clocation;
 	public RealVehicleJson(List<Vehicle> vehicles, buildPolygon2 polygon) {
 		this.vehicles = new ArrayList<Vehicle>();
 	    	this.vehicles = vehicles;
-	    	Clocation = new LocationUtilities();
+	    	Clocation = new LocationDAO();
 	    	this.polygon = polygon;
 	    	
 	    }
@@ -27,13 +27,13 @@ public class RealVehicleJson extends AbstractJsonBuilder {
     	
     	this.vehicles = new ArrayList<Vehicle>();
     	this.vehicles = vehicles;
-    	Clocation = new LocationUtilities();
+    	Clocation = new LocationDAO();
     }
 
 	@Override
 	public void build() {
 		
-		LocationUtilities locationRetriever = new LocationUtilities();
+		LocationDAO locationRetriever = new LocationDAO();
         JSONArray arrayFinal = new JSONArray();
 		
 		for(Vehicle vehicle: vehicles) {

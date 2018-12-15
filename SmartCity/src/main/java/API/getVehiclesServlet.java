@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 
 import structure.Vehicle;
-import utilities.VehicleUtilities;;
+import utilities.VehicleDAO;;
 
 @WebServlet(
 		name="getVehicles",
@@ -30,7 +30,7 @@ public class getVehiclesServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("application/json");
 		
-		VehicleUtilities retriever = new VehicleUtilities();
+		VehicleDAO retriever = new VehicleDAO();
 		List<Vehicle> vehicles = retriever.getList();
 		PrintWriter writer = resp.getWriter();
 		JSONObject principal = new JSONObject();

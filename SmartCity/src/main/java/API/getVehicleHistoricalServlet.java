@@ -23,8 +23,8 @@ import com.googlecode.objectify.Key;
 import Builder.VehicleHistorical;
 import structure.Location;
 import structure.Vehicle;
-import utilities.LocationUtilities;
-import utilities.VehicleUtilities;
+import utilities.LocationDAO;
+import utilities.VehicleDAO;
 
 @WebServlet(
 		name = "vehicleHistorical",
@@ -36,8 +36,7 @@ public class getVehicleHistoricalServlet extends HttpServlet{
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setContentType("application/json");
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		LocationUtilities locationRetriever = new LocationUtilities();
-		VehicleUtilities vehiclesRetriever = new VehicleUtilities();
+		VehicleDAO vehiclesRetriever = new VehicleDAO();
 		String fechaInicio = "02/12/2018";
 		String fechaFin = "31/12/2020";
 		Date inicio = new Date();

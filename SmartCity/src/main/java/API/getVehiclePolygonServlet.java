@@ -15,9 +15,9 @@ import Builder.RealVehicleJson;
 import Modules.Polygon.buildPolygon2;
 import structure.Location;
 import structure.Vehicle;
-import utilities.LocationUtilities;
-import utilities.PolygonUtilities;
-import utilities.VehicleUtilities;
+import utilities.LocationDAO;
+import utilities.PolygonDAO;
+import utilities.VehicleDAO;
 
 @WebServlet(
 		name = "getVehiclePolygon",
@@ -29,13 +29,10 @@ public class getVehiclePolygonServlet extends HttpServlet{
  
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setContentType("application/json");
-		VehicleUtilities vehicleRetriever = new VehicleUtilities();
+		VehicleDAO vehicleRetriever = new VehicleDAO();
 		PrintWriter writer = resp.getWriter();
-		List<Vehicle> vehicles = vehicleRetriever.getList();
-        
-        RealVehicleJson wrapper = new RealVehicleJson(vehicles);
+        RealVehicleJson wrapper = new RealVehicleJson(vehicleRetriever.getList());
         wrapper.build();
-        
         resp.setCharacterEncoding("UTF-8");
 	    writer.print(wrapper.getJson());
 	    writer.flush();

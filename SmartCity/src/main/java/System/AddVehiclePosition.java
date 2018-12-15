@@ -17,9 +17,9 @@ import structure.Location;
 import structure.Point;
 import structure.Polygon;
 import structure.Vehicle;
-import utilities.LocationUtilities;
-import utilities.PolygonUtilities;
-import utilities.VehicleUtilities;
+import utilities.LocationDAO;
+import utilities.PolygonDAO;
+import utilities.VehicleDAO;
 
 /**
  * Servlet implementation class AddVehiclePosition
@@ -68,8 +68,8 @@ public class AddVehiclePosition extends HttpServlet {
 		Key<Vehicle> clave = Key.create(Vehicle.class, Long.parseLong(key));
 		location.setVehicle(clave);
 		
-		LocationUtilities persister = factory.makeLocationUtilities();
-		VehicleUtilities retriever = factory.makeVehicleUtilities();
+		LocationDAO persister = factory.makeLocationUtilities();
+		VehicleDAO retriever = factory.makeVehicleUtilities();
 		Vehicle vehicle = retriever.get(clave);
 		Key<Location> last_location = persister.save(location);
 		vehicle.setLastLocation(last_location);

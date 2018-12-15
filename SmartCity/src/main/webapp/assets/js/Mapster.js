@@ -258,7 +258,11 @@ class Polygon {
   	  camino[index] = {lat: element[0], lng: element[1]};
   	});
   	this.gPolygon = new google.maps.Polygon({
-  		paths: camino
+  		paths: camino,
+  		strokeColor: '#9977FB',
+  		stokeOpacity: 0.4,
+  		fillColor: '#9977FB',
+  		fillOpacity: 0.1,
   	});
   	this.gPolygon.setMap(this.map);
   }

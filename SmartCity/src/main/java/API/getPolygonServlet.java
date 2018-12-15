@@ -24,7 +24,7 @@ import Builder.PolygonJson;
 import Modules.Polygon.buildPolygon2;
 import structure.Point;
 import structure.Polygon;
-import utilities.PolygonUtilities;
+import utilities.PolygonDAO;
 
 @WebServlet(
 		name = "Polygons",
@@ -57,9 +57,9 @@ public class getPolygonServlet extends HttpServlet{
 		String latInfIzquierda= requestmap.get("latInfIzquierda");
 		
 		buildPolygon2 polygon = new buildPolygon2();
-		PolygonUtilities Cpolygon = new PolygonUtilities();
+		PolygonDAO Cpolygon = new PolygonDAO();
 		PrintWriter writer = resp.getWriter();
-		List<Polygon> polygons = Cpolygon.loadPolygon();
+		List<Polygon> polygons = Cpolygon.getList();
 		
 		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
 		polygon.addPoint(longInfDerecha+","+latInfDerecha);

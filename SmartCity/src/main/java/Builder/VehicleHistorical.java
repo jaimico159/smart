@@ -13,8 +13,8 @@ import Modules.Polygon.buildPolygon2;
 import structure.Location;
 import structure.Polygon;
 import structure.Vehicle;
-import utilities.LocationUtilities;
-import utilities.VehicleUtilities;
+import utilities.LocationDAO;
+import utilities.VehicleDAO;
 
 public class VehicleHistorical extends AbstractJsonBuilder {
 	public Iterable<Vehicle> vehicles;
@@ -34,8 +34,8 @@ public class VehicleHistorical extends AbstractJsonBuilder {
 	@Override
 	public void build() {
 		
-		LocationUtilities locationRetriever = new LocationUtilities();
-		VehicleUtilities vehiclesRetriever = new VehicleUtilities();
+		LocationDAO locationRetriever = new LocationDAO();
+		VehicleDAO vehiclesRetriever = new VehicleDAO();
 		
 		JSONArray arrayEntrega = new JSONArray();
 		for(Vehicle i: vehicles) {
