@@ -28,8 +28,8 @@ import Modules.Polygon.buildPolygon2;
 import structure.Point;
 import structure.PointOfInterest;
 import structure.Polygon;
-import utilities.PointOfInterestUtilities;
-import utilities.PolygonUtilities;
+import utilities.PointOfInterestDAO;
+import utilities.PolygonDAO;
 
 @WebServlet(
 		name = "Polygons",
@@ -62,9 +62,9 @@ public class getPolygonServlet extends HttpServlet{
 		String latInfIzquierda= requestmap.get("latInfIzquierda");
 		
 		buildPolygon2 polygon = new buildPolygon2();
-		PolygonUtilities Cpolygon = new PolygonUtilities();
+		PolygonDAO Cpolygon = new PolygonDAO();
 		PrintWriter writer = resp.getWriter();
-		List<Polygon> polygons = Cpolygon.loadPolygon();
+		List<Polygon> polygons = Cpolygon.getList();
 		
 		polygon.addPoint(longInfIzquierda+","+latInfIzquierda);
 		polygon.addPoint(longInfDerecha+","+latInfDerecha);
@@ -75,7 +75,7 @@ public class getPolygonServlet extends HttpServlet{
 		Json<Polygon> json = new Json<Polygon>();
 	
 		try {
-			PointOfInterestUtilities retriever = new PointOfInterestUtilities();
+			PointOfInterestDAO retriever = new PointOfInterestDAO();
 					
 			JsonBuilder<Polygon> InterestingZone = new JsonBuilder<Polygon>();
 		

@@ -16,11 +16,14 @@ import org.json.JSONObject;
 import Builder.InterestingZoneJson;
 import Builder.Json;
 import Builder.JsonBuilder;
+import com.googlecode.objectify.Key;
+
 import Builder.ZonePolygonJson;
 import Modules.Polygon.buildPolygon2;
 import structure.PointOfInterest;
-import utilities.PointOfInterestUtilities;
-import utilities.PolygonUtilities;
+import structure.Polygon;
+import utilities.PointOfInterestDAO;
+import utilities.PolygonDAO;
 
 @WebServlet(
 		name = "getIntZonepolygon", 
@@ -31,15 +34,13 @@ public class getInZonePolygonServlet extends HttpServlet {
 		//Esta clase retorna un JSON con las zonas de interes en un poligono
 		
 		resp.setContentType("application/json");
-		PolygonUtilities retriever = new PolygonUtilities();
-		//recibe el id del poligono
-		// String idPolygon=req.getParameter("id");
-		String idPolygon = "5770237022568448";
+		PolygonDAO retriever = new PolygonDAO();
+		Long idPolygon = 5770237022568448L;
 		List<structure.Point> puntos = new ArrayList<structure.Point>();
-		PointOfInterestUtilities interestRetriver = new PointOfInterestUtilities();
+		PointOfInterestDAO interestRetriver = new PointOfInterestDAO();
 		buildPolygon2 buildPolygon = new buildPolygon2();
 		PrintWriter writer = resp.getWriter();
-		structure.Polygon polygon = retriever.loadOnePolygon(idPolygon);
+		Polygon polygon = retriever.get(Key.create(Polygon.class, idPolygon));
 
 		System.out.println("hola");
 		System.out.println(polygon.getName());

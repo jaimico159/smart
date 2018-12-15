@@ -1,4 +1,5 @@
 package utilities;
+
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 
@@ -12,16 +13,15 @@ import com.googlecode.objectify.ObjectifyService;
 import structure.Location;
 import structure.Vehicle;
 
-public class VehicleUtilities implements BasicUtilities<Vehicle>{
+public class VehicleDAO implements BasicDAO<Vehicle>{
 	
-	public VehicleUtilities() {	
+	public VehicleDAO() {	
+		ObjectifyService.register(Vehicle.class);
 		ObjectifyService.begin();
 	}
 	
 	@Override
 	public Key<Vehicle> save(Vehicle vehicle) {
-		ObjectifyService.register(Vehicle.class);
-		
 		return ofy().save().entity(vehicle).now();                
 	}
 	
@@ -66,9 +66,4 @@ public class VehicleUtilities implements BasicUtilities<Vehicle>{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
-	
-	
-
 }

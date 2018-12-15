@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import structure.Point;
 import structure.Polygon;
-import utilities.PolygonUtilities;
+import utilities.PolygonDAO;
 
 @WebServlet(
 		name="ToAddPolygonForm",

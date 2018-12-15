@@ -38,33 +38,33 @@ public class objectFactory implements utilitiesFactory, structureFactory {
 	}
 
 	@Override
-	public PointOfInterestUtilities makePointOfInterestUtilities() {
+	public PointOfInterestDAO makePointOfInterestUtilities() {
 		// TODO Auto-generated method stub
-		return new PointOfInterestUtilities();
+		return new PointOfInterestDAO();
 	}
 
 	@Override
-	public LocationUtilities makeLocationUtilities() {
+	public LocationDAO makeLocationUtilities() {
 		// TODO Auto-generated method stub
-		return new LocationUtilities();
+		return new LocationDAO();
 	}
 
 	@Override
-	public PointUtilities makePointUtilities() {
+	public PointDAO makePointUtilities() {
 		// TODO Auto-generated method stub
-		return new PointUtilities();
+		return new PointDAO();
 	}
 
 	@Override
-	public PolygonUtilities makePolygonUtilities() {
+	public PolygonDAO makePolygonUtilities() {
 		// TODO Auto-generated method stub
-		return new PolygonUtilities();
+		return new PolygonDAO();
 	}
 
 	@Override
-	public VehicleUtilities makeVehicleUtilities() {
+	public VehicleDAO makeVehicleUtilities() {
 		// TODO Auto-generated method stub
-		return new VehicleUtilities();
+		return new VehicleDAO();
 	}
 
 	

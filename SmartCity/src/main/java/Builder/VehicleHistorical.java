@@ -13,8 +13,8 @@ import Modules.Polygon.buildPolygon2;
 import structure.Location;
 import structure.Polygon;
 import structure.Vehicle;
-import utilities.LocationUtilities;
-import utilities.VehicleUtilities;
+import utilities.LocationDAO;
+import utilities.VehicleDAO;
 
 public class VehicleHistorical{
 	public JsonBuilder<Vehicle> HistJson;
@@ -32,8 +32,8 @@ public class VehicleHistorical{
 		HistJson.buildList(lista);
 		HistJson.buildObjectJson();
 		
-		LocationUtilities locationRetriever = new LocationUtilities();
-		
+		LocationDAO locationRetriever = new LocationDAO();
+		VehicleDAO vehiclesRetriever = new VehicleDAO();
 		
 		JSONArray arrayEntrega = new JSONArray();
 		for(Vehicle i: HistJson.getJson().getLista()) {

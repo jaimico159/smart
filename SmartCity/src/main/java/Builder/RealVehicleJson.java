@@ -12,23 +12,30 @@ import structure.Location;
 import structure.PointOfInterest;
 import structure.Polygon;
 import structure.Vehicle;
-import utilities.LocationUtilities;
+import utilities.LocationDAO;
 
 public class RealVehicleJson {
 	public JsonBuilder<Vehicle> RealtJson;
 
-	public RealVehicleJson(JsonBuilder<Vehicle> json) {
-		this.RealtJson = json;
+	public LocationDAO Clocation;
+	public RealVehicleJson(List<Vehicle> vehicles, buildPolygon2 polygon) {
+		this.vehicles = new ArrayList<Vehicle>();
+	    	this.vehicles = vehicles;
+	    	Clocation = new LocationDAO();
+	    	this.polygon = polygon;
 	    	
 	    }
-	 public Json<Vehicle> getJson() {
-			return this.RealtJson.getJson();
-		}
+	public RealVehicleJson(List<Vehicle> vehicles) {
+    	
+    	this.vehicles = new ArrayList<Vehicle>();
+    	this.vehicles = vehicles;
+    	Clocation = new LocationDAO();
+    }
 
-	public void build(List<Vehicle> lista) throws Exception{
-		RealtJson.buildList(lista);
-		RealtJson.buildObjectJson();
-		LocationUtilities locationRetriever = new LocationUtilities();
+	@Override
+	public void build() {
+		
+		LocationDAO locationRetriever = new LocationDAO();
         JSONArray arrayFinal = new JSONArray();
 		
 		for(Vehicle vehicle: RealtJson.getJson().getLista()) {
